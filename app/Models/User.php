@@ -24,7 +24,9 @@ class User extends Authenticatable
         'phoneno',
         'business_name',
         'location',
-        'user_type'
+        'user_type',
+        'uid',
+        'fcm_token'
     ];
 
     /**

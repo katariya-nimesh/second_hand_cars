@@ -6,38 +6,39 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\ResponseHelper;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
-    {
-        $request->validate([
-            'phoneno' => 'required|max:20'
-        ]);
-
-        $user = User::create([
-            'phoneno' => $request->phoneno
-        ]);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json(['token' => $token], 200);
-    }
-
     public function login(Request $request)
     {
-        $request->validate([
-            'phoneno' => 'required',
-        ]);
+        try{
 
-        $user = User::where('phoneno', $request->phoneno)->first();
+            $request->validate([
+                'phoneno' => 'required',
+                'uid' => 'required',
+                'fcm_token' => 'required',
+                'user_type' => 'required'
+            ]);
 
-        if (!$user) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            $user = User::updateOrCreate(
+                ['phoneno' => $request->phoneno],
+                [
+                    'uid' => $request->uid,
+                    'fcm_token' => $request->fcm_token,
+                    'user_type' => $request->user_type
+                ]
+            );
+
+            if (!$user) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return ResponseHelper::success(['token' => $token, 'data' => $user]);
+        }catch(\Exception $e){
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json(['token' => $token], 200);
     }
 }

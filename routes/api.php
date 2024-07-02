@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +17,14 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('user', [UserController::class, 'getUser']);
+    Route::get('get-users', [UserController::class, 'getUser']);
+
+    // Car APIs
+    Route::get('get-car-brands', [CarController::class, 'getCarBrands']);
+    Route::get('car-registration-years/{brandId}', [CarController::class, 'getRegistrationYearsByBrandId']);
+    Route::get('car-varient/{registrationYearId}', [CarController::class, 'getCarVarientByRegistrationYearId']);
+
 });
