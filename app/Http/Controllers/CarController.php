@@ -7,6 +7,7 @@ use App\Helpers\ResponseHelper;
 use App\Models\CarBrand;
 use App\Models\CarRegistrationYear;
 use App\Models\CarVariant;
+use App\Models\CarFuelType;
 
 
 class CarController extends Controller
@@ -40,6 +41,21 @@ class CarController extends Controller
     {
         try {
             $years = CarVariant::where('car_registration_year_id', $registrationYearId)->get();
+
+            if ($years->isEmpty()) {
+                return ResponseHelper::error('No car varient on this given car registration year id', 404);
+            }
+
+            return ResponseHelper::success($years, 'Car Varient retrieved successfully');
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function getCarFuelTypeByVarientId($varientId)
+    {
+        try {
+            $years = CarFuelType::where('car_varient_id', $varientId)->get();
 
             if ($years->isEmpty()) {
                 return ResponseHelper::error('No car varient on this given car registration year id', 404);
