@@ -9,6 +9,8 @@ class CarFuelVariant extends Model
 {
     use HasFactory;
 
+    protected $table = "car_fuel_varient";
+
     protected $fillable = [
         'name',
         'car_fuel_type_id'
