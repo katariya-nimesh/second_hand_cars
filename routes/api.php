@@ -27,12 +27,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('car-registration-years/{brandId}', [CarController::class, 'getRegistrationYearsByBrandId']);
     Route::get('car-varient/{registrationYearId}', [CarController::class, 'getCarVarientByRegistrationYearId']);
     Route::get('car-fuel-type/{varientId}', [CarController::class, 'getCarFuelTypeByVarientId']);
-
     Route::get('car-fuel-varient/{carFuelTypeId}', [CarController::class, 'getCarFuelVarientByCarFuelTypeId']);
     Route::get('car-varient-type/{carFuelVarientId}', [CarController::class, 'getCarVarientTypeByCarFuelVarientId']);
     Route::get('car-owners', [CarController::class, 'getCarOwners']);
     Route::get('car-kilometer', [CarController::class, 'getCarKilometers']);
-    Route::get('car-images/{carVarientTypeId}', [CarController::class, 'getCarImagesByCarVarientTypeId']);
 
-    // Route::get('car-details', [CarController::class, 'getCarVarientByRegistrationYearId']);
+    // Route::get('car-images/{carVarientTypeId}', [CarController::class, 'getCarImagesByCarVarientTypeId']);
+
+    Route::post('car-details', [CarController::class, 'addCarDetails']);
+    Route::get('get-user-car-details', [CarController::class, 'getUserCarDetails']);
 });
