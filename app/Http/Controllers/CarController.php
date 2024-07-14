@@ -216,4 +216,35 @@ class CarController extends Controller
         }
     }
 
+    public function changeUserCarStatus(Request $request){
+        try {
+
+            $request->validate([
+                'car_details_id' => 'required',
+                'status' => 'required',
+            ]);
+
+            $user = Auth::user();
+
+            // Find the car details for the authenticated user
+            $carDetail = CarDetail::where('user_id', $user->id)->first();
+
+            if ($carDetail) {
+                // Update the car details with the new data
+                $carDetail->update([
+                    'car_details_id' => $request->car_details_id,
+                    'status' => $request->status,
+                ]);
+
+                // Redirect or return response
+                return ResponseHelper::success($carDetail, 'Car details updated successfully!');
+            } else {
+                return ResponseHelper::error('Car details not found.', 404);
+            }
+
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
+    }
+
 }

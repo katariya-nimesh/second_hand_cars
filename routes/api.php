@@ -36,4 +36,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('car-details', [CarController::class, 'addCarDetails']);
     Route::get('get-user-car-details', [CarController::class, 'getUserCarDetails']);
+
+    // check user wallet balance
+    Route::get('get-user-wallet-balance', [UserController::class, 'getUserWalletBalance']);
+
+    // change car status
+    Route::post('change-user-car-status', [CarController::class, 'changeUserCarStatus']);
+
+    // update user profile
+    Route::post('update-user-profile', [UserController::class, 'updateUserProfile']);
+
 });
