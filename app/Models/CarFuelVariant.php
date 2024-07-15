@@ -15,4 +15,9 @@ class CarFuelVariant extends Model
         'name',
         'car_fuel_type_id'
     ];
+
+    public function carFuelType()
+    {
+        return $this->belongsTo(CarFuelType::class);
+    }
 }

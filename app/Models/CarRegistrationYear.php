@@ -16,7 +16,7 @@ class CarRegistrationYear extends Model
         'car_brand_id'
     ];
 
-    public function brand()
+    public function carBrand()
     {
         return $this->belongsTo(CarBrand::class);
     }

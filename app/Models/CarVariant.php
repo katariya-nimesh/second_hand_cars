@@ -15,4 +15,14 @@ class CarVariant extends Model
         'name',
         'car_registration_year_id'
     ];
+
+    public function carRegistrationYear()
+    {
+        return $this->belongsTo(CarRegistrationYear::class);
+    }
+
+    public function carFuelTypes()
+    {
+        return $this->hasMany(CarFuelType::class);
+    }
 }

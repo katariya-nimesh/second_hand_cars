@@ -16,4 +16,14 @@ class CarFuelType extends Model
         'transmission',
         'car_varient_id'
     ];
+
+    public function carVariant()
+    {
+        return $this->belongsTo(CarVariant::class, 'car_varient_id');
+    }
+
+    public function carFuelVarients()
+    {
+        return $this->hasMany(CarFuelVariant::class);
+    }
 }
