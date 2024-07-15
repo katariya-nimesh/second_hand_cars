@@ -13,7 +13,8 @@ class CarBrand extends Model
     protected $table = "car_brand";
 
     protected $fillable = [
-        'name'
+        'name',
+        'image'
     ];
 
     public function car_registration_years()
