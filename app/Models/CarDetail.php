@@ -22,7 +22,8 @@ class CarDetail extends Model
         'car_kilometer_id',
         'price',
         'status',
-        'accident'
+        'accident',
+        'publish_status'
     ];
 
     public function car_varient_type()

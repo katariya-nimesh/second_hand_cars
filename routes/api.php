@@ -35,7 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::get('car-images/{carVarientTypeId}', [CarController::class, 'getCarImagesByCarVarientTypeId']);
 
     Route::post('car-details', [CarController::class, 'addCarDetails']);
-    Route::get('get-user-car-details', [CarController::class, 'getUserCarDetails']);
+    Route::get('get-user-car-details/{id?}', [CarController::class, 'getUserCarDetails']);
 
     // check user wallet balance
     Route::get('get-user-wallet-balance', [UserController::class, 'getUserWalletBalance']);

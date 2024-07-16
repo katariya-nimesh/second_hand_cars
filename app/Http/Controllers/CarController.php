@@ -34,7 +34,7 @@ class CarController extends Controller
     public function getRegistrationYearsByBrandId($brandId)
     {
         try {
-            $years = CarRegistrationYear::where('car_brand_id', $brandId)->get();
+            $years = CarRegistrationYear::where('car_brand_id', $brandId)->orderBy('year', 'desc')->get();
 
             if ($years->isEmpty()) {
                 return ResponseHelper::error('No registration years found for the given brand ID', 404);
@@ -146,7 +146,8 @@ class CarController extends Controller
                 'car_kilometer_id' => 'required',
                 'price' => 'required',
                 'accident' => 'required',
-                'status' => 'required'
+                'status' => 'required',
+                'publish_status' => 'required'
             ];
 
             // Validate the request
@@ -165,6 +166,7 @@ class CarController extends Controller
                 'price' => $request->price,
                 'accident' => $request->accident,
                 'status' => $request->status,
+                'publish_status' => $request->publish_status,
                 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate images
                 'videos.*' => 'mimes:mp4,mov,ogg,qt|max:20000' // Validate videos
             ]);
@@ -200,11 +202,24 @@ class CarController extends Controller
         }
     }
 
-    public function getUserCarDetails(){
+    public function getUserCarDetails($status = null){
         try {
             $user = Auth::user();
 
-            $carDetails = CarDetail::with(['car_varient_type.car_images','car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year.car_brand', 'car_owner', 'car_kilometer'])->where('user_id', $user->id)->get();
+            $query = CarDetail::with([
+                'car_varient_type.car_images',
+                'car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year.car_brand',
+                'car_owner',
+                'car_kilometer'
+            ])->where('user_id', $user->id);
+
+            if ($status == "Deactive" || $status == "Active") {
+                $query->where('status', $status)->where('publish_status', 'Publish');
+            } elseif ($status == "Save") {
+                $query->where('publish_status', $status);
+            }
+
+            $carDetails = $query->get();
 
             if ($carDetails->isEmpty()) {
                 return ResponseHelper::error('No car details', 404);
