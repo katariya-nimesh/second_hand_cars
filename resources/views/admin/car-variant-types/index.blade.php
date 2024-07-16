@@ -18,7 +18,7 @@
                 <tr>
                     <td>{{ $variantType->id }}</td>
                     <td>{{ $variantType->name }}</td>
-                    <td>{{ $variantType->carFuelVariant->name }}</td>
+                    <td>{{ $variantType->car_fuel_varient->name }}</td>
                     <td>
                         <a href="{{ route('car-variant-types.edit', $variantType->id) }}" class="button edit">Edit</a>
                         <form action="{{ route('car-variant-types.destroy', $variantType->id) }}" method="POST" style="display:inline;">

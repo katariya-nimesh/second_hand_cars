@@ -10,7 +10,7 @@ class CarVarientController extends Controller
 {
     public function index()
     {
-        $carVarients = CarVariant::with('carRegistrationYear')->get();
+        $carVarients = CarVariant::with('car_registration_year')->get();
         return view('admin.car-varients.index', compact('carVarients'));
     }
 

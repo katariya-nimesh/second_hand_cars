@@ -17,7 +17,7 @@
                 <tr>
                     <td>{{ $varient->id }}</td>
                     <td>{{ $varient->name }}</td>
-                    <td>{{ $varient->carFuelType->fuel_type }}</td>
+                    <td>{{ $varient->car_fuel_type->fuel_type }}</td>
                     <td>
                         <a href="{{ route('car-fuel-varients.edit', $varient->id) }}" class="button edit">Edit</a>
                         <form action="{{ route('car-fuel-varients.destroy', $varient->id) }}" method="POST" style="display:inline;">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CarBrand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CarBrandController extends Controller
 {
@@ -22,9 +23,17 @@ class CarBrandController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:car_brand,name',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        CarBrand::create($request->all());
+        $carBrand = new CarBrand($request->all());
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('public/car_brand');
+            $carBrand->image = Storage::url($path);
+        }
+
+        $carBrand->save();
 
         return redirect()->route('car-brands.index')->with('success', 'Car brand created successfully.');
     }
@@ -38,18 +47,38 @@ class CarBrandController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:car_brand,name,'.$id,
+            'name' => 'required|unique:car_brand,name,' . $id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $carBrand = CarBrand::find($id);
-        $carBrand->update($request->all());
+        $carBrand->fill($request->all());
+
+        if ($request->hasFile('image')) {
+            if ($carBrand->image) {
+                $oldImagePath = str_replace('/storage', 'public', $carBrand->image);
+                Storage::delete($oldImagePath);
+            }
+            $path = $request->file('image')->store('public/car_brand');
+            $carBrand->image = Storage::url($path);
+        }
+
+        $carBrand->save();
 
         return redirect()->route('car-brands.index')->with('success', 'Car brand updated successfully.');
     }
 
     public function destroy($id)
     {
-        CarBrand::find($id)->delete();
+        $carBrand = CarBrand::find($id);
+
+        if ($carBrand->image) {
+            $oldImagePath = str_replace('/storage', 'public', $carBrand->image);
+            Storage::delete($oldImagePath);
+        }
+
+        $carBrand->delete();
+
         return redirect()->route('car-brands.index')->with('success', 'Car brand deleted successfully.');
     }
 }

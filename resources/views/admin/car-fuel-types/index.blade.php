@@ -19,7 +19,7 @@
                     <td>{{ $fuelType->id }}</td>
                     <td>{{ $fuelType->fuel_type }}</td>
                     <td>{{ $fuelType->transmission }}</td>
-                    <td>{{ optional($fuelType->carVariant)->name ?? 'N/A' }}</td>
+                    <td>{{ optional($fuelType->car_varient)->name ?? 'N/A' }}</td>
                     <td>
                         <a href="{{ route('car-fuel-types.edit', $fuelType->id) }}" class="button edit">Edit</a>
                         <form action="{{ route('car-fuel-types.destroy', $fuelType->id) }}" method="POST" style="display:inline;">

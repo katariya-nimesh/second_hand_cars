@@ -10,7 +10,7 @@ class CarFuelVarientController extends Controller
 {
     public function index()
     {
-        $carFuelVarients = CarFuelVariant::with('carFuelType')->get();
+        $carFuelVarients = CarFuelVariant::with('car_fuel_type')->get();
         return view('admin.car-fuel-varients.index', compact('carFuelVarients'));
     }
 

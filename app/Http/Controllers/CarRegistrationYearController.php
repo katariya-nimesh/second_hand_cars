@@ -10,7 +10,8 @@ class CarRegistrationYearController extends Controller
 {
     public function index()
     {
-        $carRegistrationYears = CarRegistrationYear::with('carBrand')->get();
+        // Update the relationship name here
+        $carRegistrationYears = CarRegistrationYear::with('car_brand')->get();
         return view('admin.car-registration-years.index', compact('carRegistrationYears'));
     }
 

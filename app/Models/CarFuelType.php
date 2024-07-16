@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\CarFuelVariant;
+use App\Models\CarVariant;
 
 class CarFuelType extends Model
 {
@@ -17,13 +19,13 @@ class CarFuelType extends Model
         'car_varient_id'
     ];
 
-    public function carVariant()
+    public function car_fuel_varients()
     {
-        return $this->belongsTo(CarVariant::class, 'car_varient_id');
+        return $this->hasMany(CarFuelVariant::class, 'car_fuel_type_id');
     }
 
-    public function carFuelVarients()
+    public function car_varient()
     {
-        return $this->hasMany(CarFuelVariant::class);
+        return $this->belongsTo(CarVariant::class);
     }
 }

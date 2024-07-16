@@ -8,6 +8,7 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -16,6 +17,13 @@
                 <tr>
                     <td>{{ $brand->id }}</td>
                     <td>{{ $brand->name }}</td>
+                    <td>
+                        @if($brand->image)
+                            <img src="{{ $brand->image }}" alt="{{ $brand->name }}" width="100">
+                        @else
+                            No image
+                        @endif
+                    </td>
                     <td>
                         <a href="{{ route('car-brands.edit', $brand->id) }}" class="button">Edit</a>
                         <form action="{{ route('car-brands.destroy', $brand->id) }}" method="POST" style="display:inline;">
