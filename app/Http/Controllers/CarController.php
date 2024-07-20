@@ -259,7 +259,7 @@ class CarController extends Controller
                 $query->where('publish_status', $status);
             }
 
-            $carDetails = $query->get();
+            $carDetails = $query->orderBy('created_at', 'desc')->get();
 
             if ($carDetails->isEmpty()) {
                 return ResponseHelper::error('No car details', 404);
