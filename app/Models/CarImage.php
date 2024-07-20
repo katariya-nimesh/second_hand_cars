@@ -22,4 +22,9 @@ class CarImage extends Model
     {
         return $this->belongsTo(CarVariantType::class);
     }
+
+    public function getImageAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
 }

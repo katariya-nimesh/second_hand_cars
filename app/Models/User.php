@@ -26,7 +26,8 @@ class User extends Authenticatable
         'location',
         'user_type',
         'uid',
-        'fcm_token'
+        'fcm_token',
+        'image'
     ];
 
     /**
@@ -47,4 +48,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getImageAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
 }

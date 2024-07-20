@@ -46,4 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // update user profile
     Route::post('update-user-profile', [UserController::class, 'updateUserProfile']);
 
+    // add transaction details
+    Route::post('add-transaction-details', [UserController::class, 'addTransactionDetails']);
+
 });

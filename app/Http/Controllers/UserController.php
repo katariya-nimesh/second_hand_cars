@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Helpers\ResponseHelper;
 use App\Models\UserWallet;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -55,6 +56,19 @@ class UserController extends Controller
             // Update the user's profile details with only the validated fields
             $user->update($validatedData);
 
+            // Handle profile image upload
+            if ($request->hasFile('image')) {
+                // Delete the old image if it exists
+                if ($user->image) {
+                    $oldImagePath = str_replace('/storage', 'public', $user->image);
+                    Storage::delete($oldImagePath);
+                }
+
+                // Store the new image
+                $path = $request->file('image')->store('public/profile_images');
+                $user->image = Storage::url($path);
+                $user->save();
+            }
             // Redirect or return response
             return ResponseHelper::success($user, 'Car details updated successfully!');
 
@@ -63,4 +77,7 @@ class UserController extends Controller
         }
     }
 
+    public function addTransactionDetails(Request $request){
+        //
+    }
 }

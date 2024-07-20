@@ -157,19 +157,59 @@ class CarController extends Controller
                 return ResponseHelper::validationError($validator->errors());
             }
             $user = Auth::user();
-            // Add car details
-            $carDetails = CarDetail::create([
-                'user_id' => $user->id,
-                'car_varient_type_id' => $request->car_varient_type_id,
-                'car_owner_id' => $request->car_owner_id,
-                'car_kilometer_id' => $request->car_kilometer_id,
-                'price' => $request->price,
-                'accident' => $request->accident,
-                'status' => $request->status,
-                'publish_status' => $request->publish_status,
-                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate images
-                'videos.*' => 'mimes:mp4,mov,ogg,qt|max:20000' // Validate videos
-            ]);
+
+            $isUpdate = $request->has('car_details_id');
+
+            if ($isUpdate) {
+                $carDetails = CarDetail::find($request->car_details_id);
+
+                if (!$carDetails) {
+                    return ResponseHelper::error('Car details not found', 404);
+                }
+
+                // Update car details
+                $carDetails->update([
+                    'car_varient_type_id' => $request->car_varient_type_id,
+                    'car_owner_id' => $request->car_owner_id,
+                    'car_kilometer_id' => $request->car_kilometer_id,
+                    'price' => $request->price,
+                    'accident' => $request->accident,
+                    'status' => $request->status,
+                    'publish_status' => $request->publish_status,
+                ]);
+
+                // Delete old images if new images are provided
+                if ($request->hasFile('images')) {
+                    $oldImages = CarImage::where('car_varient_type_id', $carDetails->car_varient_type_id)->where('type', 'image')->get();
+                    foreach ($oldImages as $oldImage) {
+                        $oldImagePath = str_replace('/storage', 'public', $oldImage->image);
+                        Storage::delete($oldImagePath);
+                        $oldImage->delete();
+                    }
+                }
+
+                // Delete old videos if new videos are provided
+                if ($request->hasFile('videos')) {
+                    $oldVideos = CarImage::where('car_varient_type_id', $carDetails->car_varient_type_id)->where('type', 'video')->get();
+                    foreach ($oldVideos as $oldVideo) {
+                        $oldVideoPath = str_replace('/storage', 'public', $oldVideo->image);
+                        Storage::delete($oldVideoPath);
+                        $oldVideo->delete();
+                    }
+                }
+            } else {
+                // Add new car details
+                $carDetails = CarDetail::create([
+                    'user_id' => $user->id,
+                    'car_varient_type_id' => $request->car_varient_type_id,
+                    'car_owner_id' => $request->car_owner_id,
+                    'car_kilometer_id' => $request->car_kilometer_id,
+                    'price' => $request->price,
+                    'accident' => $request->accident,
+                    'status' => $request->status,
+                    'publish_status' => $request->publish_status,
+                ]);
+            }
 
             // Handle images upload
             if ($request->hasFile('images')) {
