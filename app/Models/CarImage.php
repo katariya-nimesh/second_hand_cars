@@ -15,7 +15,8 @@ class CarImage extends Model
     protected $fillable = [
         'image',
         'car_varient_type_id',
-        'type'
+        'type',
+        'car_details_id'
     ];
 
     public function car_varient_type()

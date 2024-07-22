@@ -180,7 +180,7 @@ class CarController extends Controller
 
                 // Delete old images if new images are provided
                 if ($request->hasFile('images')) {
-                    $oldImages = CarImage::where('car_varient_type_id', $carDetails->car_varient_type_id)->where('type', 'image')->get();
+                    $oldImages = CarImage::where('car_varient_type_id', $carDetails->car_varient_type_id)->where('car_details_id', $carDetails->id)->where('type', 'image')->get();
                     foreach ($oldImages as $oldImage) {
                         $oldImagePath = str_replace('/storage', 'public', $oldImage->image);
                         Storage::delete($oldImagePath);
@@ -190,7 +190,7 @@ class CarController extends Controller
 
                 // Delete old videos if new videos are provided
                 if ($request->hasFile('videos')) {
-                    $oldVideos = CarImage::where('car_varient_type_id', $carDetails->car_varient_type_id)->where('type', 'video')->get();
+                    $oldVideos = CarImage::where('car_varient_type_id', $carDetails->car_varient_type_id)->where('car_details_id', $carDetails->id)->where('type', 'video')->get();
                     foreach ($oldVideos as $oldVideo) {
                         $oldVideoPath = str_replace('/storage', 'public', $oldVideo->image);
                         Storage::delete($oldVideoPath);
@@ -218,7 +218,8 @@ class CarController extends Controller
                     CarImage::create([
                         'car_varient_type_id' => $request->car_varient_type_id,
                         'image' => Storage::url($path),
-                        'type' => 'image'
+                        'type' => 'image',
+                        'car_details_id' => $carDetails->id,
                     ]);
                 }
             }
@@ -229,7 +230,8 @@ class CarController extends Controller
                     CarImage::create([
                         'car_varient_type_id' => $request->car_varient_type_id,
                         'image' => Storage::url($path),
-                        'type' => 'video'
+                        'type' => 'video',
+                        'car_details_id' => $carDetails->id,
                     ]);
                 }
             }
@@ -277,6 +279,7 @@ class CarController extends Controller
             $request->validate([
                 'car_details_id' => 'required',
                 'status' => 'required',
+                'publish_status' => 'required',
             ]);
 
             $user = Auth::user();
@@ -289,6 +292,7 @@ class CarController extends Controller
                 $carDetail->update([
                     'car_details_id' => $request->car_details_id,
                     'status' => $request->status,
+                    'publish_status' => $request->publish_status,
                 ]);
 
                 // Redirect or return response
