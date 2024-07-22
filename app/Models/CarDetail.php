@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\CarVariantType;
 use App\Models\CarOwner;
 use App\Models\CarKilometer;
+use App\Models\CarImage;
 
 
 class CarDetail extends Model
@@ -39,5 +40,10 @@ class CarDetail extends Model
     public function car_kilometer()
     {
         return $this->belongsTo(CarKilometer::class);
+    }
+
+    public function car_image()
+    {
+        return $this->hasMany(CarImage::class, 'car_details_id');
     }
 }
