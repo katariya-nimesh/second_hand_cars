@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\CarVariant;
 use App\Models\CarRegistrationYear;
-use App\Models\CarBrand;
 use Illuminate\Http\Request;
 
 class CarVarientController extends Controller
@@ -17,8 +16,8 @@ class CarVarientController extends Controller
 
     public function create()
     {
-        $carBrands = CarBrand::all();
-        return view('admin.car-varients.create', compact('carBrands'));
+        $carRegistrationYears = CarRegistrationYear::all();
+        return view('admin.car-varients.create', compact('carRegistrationYears'));
     }
 
     public function store(Request $request)
@@ -35,9 +34,8 @@ class CarVarientController extends Controller
 
     public function edit(CarVariant $carVarient)
     {
-        $carBrands = CarBrand::all();
-        $carRegistrationYears = $carVarient->car_registration_year()->get();
-        return view('admin.car-varients.edit', compact('carVarient', 'carBrands', 'carRegistrationYears'));
+        $carRegistrationYears = CarRegistrationYear::all();
+        return view('admin.car-varients.edit', compact('carVarient', 'carRegistrationYears'));
     }
 
     public function update(Request $request, CarVariant $carVarient)
@@ -57,12 +55,5 @@ class CarVarientController extends Controller
         $carVarient->delete();
 
         return redirect()->route('car-varients.index')->with('success', 'Car Varient deleted successfully.');
-    }
-
-    public function getRegistrationYears(Request $request)
-    {
-        $carBrandId = $request->car_brand_id;
-        $registrationYears = CarRegistrationYear::where('car_brand_id', $carBrandId)->get();
-        return response()->json($registrationYears);
     }
 }

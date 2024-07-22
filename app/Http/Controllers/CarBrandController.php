@@ -23,7 +23,7 @@ class CarBrandController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:car_brand,name',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $carBrand = new CarBrand($request->all());
