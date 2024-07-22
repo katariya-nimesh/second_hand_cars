@@ -43,6 +43,7 @@ Route::get('/', function () {
 Route::resource('admin/car-brands', CarBrandController::class);
 Route::resource('admin/car-registration-years', CarRegistrationYearController::class);
 Route::resource('admin/car-varients', CarVarientController::class);
+Route::get('car-varients/registration-years', [CarVarientController::class, 'getRegistrationYears'])->name('car-varients.registration-years');
 Route::resource('admin/car-fuel-types', CarFuelTypeController::class);
 Route::resource('admin/car-fuel-varients', CarFuelVarientController::class);
 Route::resource('admin/car-variant-types', CarVariantTypeController::class);
