@@ -286,7 +286,7 @@ class CarController extends Controller
             $user = Auth::user();
 
             // Find the car details for the authenticated user
-            $carDetail = CarDetail::where('user_id', $user->id)->first();
+            $carDetail = CarDetail::where('user_id', $user->id)->where('id', $request->car_details_id)->first();
 
             if ($carDetail) {
                 // Update the car details with the new data
