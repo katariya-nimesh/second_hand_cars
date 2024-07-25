@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\NotificationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,5 +49,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // add transaction details
     Route::post('add-transaction-details', [UserController::class, 'addTransactionDetails']);
+
+    // Notifications
+    Route::get('/get-notifications', [NotificationsController::class, 'index']);
+    Route::post('/add-notifications', [NotificationsController::class, 'store']);
+    Route::delete('/delete-notifications/{id}', [NotificationsController::class, 'destroy']);
 
 });
