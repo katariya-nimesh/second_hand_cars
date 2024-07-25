@@ -8,6 +8,7 @@ use App\Models\CarVariantType;
 use App\Models\CarOwner;
 use App\Models\CarKilometer;
 use App\Models\CarImage;
+use App\Models\User;
 
 
 class CarDetail extends Model
@@ -45,5 +46,10 @@ class CarDetail extends Model
     public function car_image()
     {
         return $this->hasMany(CarImage::class, 'car_details_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

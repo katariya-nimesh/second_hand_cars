@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\ResponseHelper;
 use App\Models\UserWallet;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -79,5 +80,22 @@ class UserController extends Controller
 
     public function addTransactionDetails(Request $request){
         //
+    }
+
+    public function getVendorProfile($id){
+        try {
+            // Find the vendor by ID
+            $vendor = User::where('user_type', 'vendor')->where('id', $id)->first();
+
+            // Check if the vendor exists
+            if (!$vendor) {
+                return ResponseHelper::error('Vendor not found', 404);
+            }
+
+            // Return the vendor profile
+            return ResponseHelper::success($vendor, 'Vendor profile retrieved successfully');
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
     }
 }

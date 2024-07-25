@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,4 +56,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/add-notifications', [NotificationsController::class, 'store']);
     Route::delete('/delete-notifications/{id}', [NotificationsController::class, 'destroy']);
 
+    // get all cars
+    Route::get('/get-all-cars', [CarController::class, 'getAllCars']);
+
+    // wishlist
+    Route::post('/add-wishlist', [WishlistController::class, 'store']);
+    Route::get('/get-wishlist', [WishlistController::class, 'index']);
+    Route::delete('/delete-wishlist/{id}', [WishlistController::class, 'destroy']);
+
+    // Vendor profile
+    Route::get('get-vendor-profile/{id}', [UserController::class, 'getVendorProfile']);
 });

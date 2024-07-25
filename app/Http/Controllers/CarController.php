@@ -244,7 +244,7 @@ class CarController extends Controller
         }
     }
 
-    public function getUserCarDetails($status = null){
+    public function getUserCarDetails(Request $request, $status = null){
         try {
             $user = Auth::user();
 
@@ -261,8 +261,8 @@ class CarController extends Controller
             } elseif ($status == "Save") {
                 $query->where('publish_status', $status);
             }
-
-            $carDetails = $query->orderBy('created_at', 'desc')->get();
+            $perPage = $request->input('per_page', 10);
+            $carDetails = $query->orderBy('created_at', 'desc')->paginate($perPage);
 
             if ($carDetails->isEmpty()) {
                 return ResponseHelper::error('No car details', 404);
@@ -302,6 +302,33 @@ class CarController extends Controller
                 return ResponseHelper::error('Car details not found.', 404);
             }
 
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function getAllCars(Request $request){
+        try {
+            $query = CarDetail::with([
+                'car_varient_type',
+                'car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year.car_brand',
+                'car_owner',
+                'car_kilometer',
+                'car_image',
+                'user'
+            ])->where('status', "Active")->where('publish_status', 'Publish');
+
+            // Get the number of items per page from the request, default to 10 if not provided
+            $perPage = $request->input('per_page', 10);
+
+            // Paginate the results
+            $carDetails = $query->orderBy('created_at', 'desc')->paginate($perPage);
+
+            if ($carDetails->isEmpty()) {
+                return ResponseHelper::error('No car details', 404);
+            }
+
+            return ResponseHelper::success($carDetails, 'Car details retrieved successfully');
         } catch (\Exception $e) {
             return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }
