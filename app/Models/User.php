@@ -53,4 +53,13 @@ class User extends Authenticatable
     {
         return $value ? asset($value) : null;
     }
+
+    public function car_detail()
+    {
+        return $this->hasMany(CarDetail::class, 'user_id')->with(['car_varient_type',
+                'car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year.car_brand',
+                'car_owner',
+                'car_kilometer',
+                'car_image',])->where('status', 'Active')->where('publish_status', 'Publish');
+    }
 }

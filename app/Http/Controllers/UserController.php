@@ -85,7 +85,7 @@ class UserController extends Controller
     public function getVendorProfile($id){
         try {
             // Find the vendor by ID
-            $vendor = User::where('user_type', 'vendor')->where('id', $id)->first();
+            $vendor = User::with('car_detail')->where('user_type', 'vendor')->where('id', $id)->first();
 
             // Check if the vendor exists
             if (!$vendor) {
