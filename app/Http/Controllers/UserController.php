@@ -98,4 +98,41 @@ class UserController extends Controller
             return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }
     }
+
+    public function getAllVendor(){
+        try {
+            // Find the vendor by ID
+            $vendor = User::where('user_type', 'vendor')->get();
+
+            // Check if the vendor exists
+            if (!$vendor) {
+                return ResponseHelper::error('Vendor not found', 404);
+            }
+
+            // Return the vendor profile
+            return ResponseHelper::success($vendor, 'Vendor profile retrieved successfully');
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function getAllVendorLocation()
+    {
+        try {
+            // Get unique locations for vendors
+            $locations = User::where('user_type', 'vendor')
+                ->distinct()
+                ->pluck('location');
+
+            // Check if any locations were found
+            if ($locations->isEmpty()) {
+                return ResponseHelper::error('No vendor locations found', 404);
+            }
+
+            // Return the unique locations
+            return ResponseHelper::success($locations, 'Vendor locations retrieved successfully');
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
+    }
 }

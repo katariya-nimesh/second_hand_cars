@@ -66,4 +66,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Vendor profile
     Route::get('get-vendor-profile/{id}', [UserController::class, 'getVendorProfile']);
+
+    // All vendor for filter car details
+    Route::get('get-all-vendor', [UserController::class, 'getAllVendor']);
+
+    // All vendor location for filter car details
+    Route::get('get-all-vendor-location', [UserController::class, 'getAllVendorLocation']);
+
+    // Get fuel varient using varient id
+    Route::get('car-fuel-varient-by-varient-id/{varientId}', [CarController::class, 'getCarFuelVarientByCarVarientId']);
 });

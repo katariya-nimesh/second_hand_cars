@@ -9,6 +9,8 @@ use App\Models\CarOwner;
 use App\Models\CarKilometer;
 use App\Models\CarImage;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Wishlist;
 
 
 class CarDetail extends Model
@@ -27,6 +29,19 @@ class CarDetail extends Model
         'accident',
         'publish_status'
     ];
+
+    public function getWishlistStatusAttribute()
+    {
+        $user = Auth::user();
+        $wishlist = Wishlist::where('user_id', $user->id)->where('car_details_id', $this->id)->first();
+
+        if ($wishlist) {
+            return true;
+        }
+        return false;
+    }
+
+    protected $appends = ['wishlist_status'];
 
     public function car_varient_type()
     {
