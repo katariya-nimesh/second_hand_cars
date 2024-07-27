@@ -44,7 +44,7 @@ class WishlistController extends Controller
 
             $user = Auth::user();
             $perPage = $request->input('per_page', 10);
-            $wishlist = Wishlist::with('car_detail')->where('user_id', $user->id)->paginate($perPage);
+            $wishlist = Wishlist::with(['car_detail', 'user'])->where('user_id', $user->id)->paginate($perPage);
 
             return ResponseHelper::success($wishlist, 'Wishlist retrieved successfully');
         } catch (\Exception $e) {
