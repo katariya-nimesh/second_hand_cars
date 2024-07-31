@@ -321,71 +321,71 @@ class CarController extends Controller
             // Apply dynamic filters
 
             // Company(brand) name
-            if ($request->has('car_brand_id')) {
+            if ($request->has('car_brand_id') && !empty($request->car_brand_id)) {
                 $query->whereHas('car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year.car_brand', function($q) use ($request) {
                     $q->where('id', $request->car_brand_id);
                 });
             }
 
             // Registration year
-            if ($request->has('car_registration_year_id')) {
+            if ($request->has('car_registration_year_id') && !empty($request->car_registration_year_id)) {
                 $query->whereHas('car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year', function($q) use ($request) {
                     $q->where('id', $request->car_registration_year_id);
                 });
             }
 
             // Model
-            if ($request->has('car_varient_id')) {
+            if ($request->has('car_varient_id') && !empty($request->car_varient_id)) {
                 $query->whereHas('car_varient_type.car_fuel_varient.car_fuel_type.car_varient', function($q) use ($request) {
                     $q->where('id', $request->car_varient_id);
                 });
             }
 
             // Varient
-            if ($request->has('car_fuel_varient_id')) {
+            if ($request->has('car_fuel_varient_id') && !empty($request->car_fuel_varient_id)) {
                 $query->whereHas('car_varient_type.car_fuel_varient', function($q) use ($request) {
                     $q->where('id', $request->car_fuel_varient_id);
                 });
             }
 
             // Type
-            if ($request->has('car_varient_type_id')) {
+            if ($request->has('car_varient_type_id') && !empty($request->car_varient_type_id)) {
                 $query->where('car_varient_type_id', $request->car_varient_type_id);
             }
 
             // Owner
-            if ($request->has('car_owner_id')) {
+            if ($request->has('car_owner_id') && !empty($request->car_owner_id)) {
                 $query->where('car_owner_id', $request->car_owner_id);
             }
 
             // Kilometer
-            if ($request->has('car_kilometer_id')) {
+            if ($request->has('car_kilometer_id') && !empty($request->car_kilometer_id)) {
                 $query->where('car_kilometer_id', $request->car_kilometer_id);
             }
 
             // Price
-            if ($request->has('price_min')) {
+            if ($request->has('price_min') && !empty($request->price_min)) {
                 $query->where('price', '>=', $request->price_min);
             }
 
-            if ($request->has('price_max')) {
+            if ($request->has('price_max') && !empty($request->price_max)) {
                 $query->where('price', '<=', $request->price_max);
             }
 
             // Vendor
-            if ($request->has('car_vendor_id')) {
+            if ($request->has('car_vendor_id') && !empty($request->car_vendor_id)) {
                 $query->where('user_id', $request->car_vendor_id);
             }
 
             // Location
-            if ($request->has('location')) {
+            if ($request->has('location') && !empty($request->location)) {
                 $query->whereHas('user', function($q) use ($request) {
                     $q->where('location', $request->location);
                 });
             }
 
             // Fuel type
-            if ($request->has('fuel_type')) {
+            if ($request->has('fuel_type') && !empty($request->fuel_type)) {
                 $query->whereHas('car_varient_type.car_fuel_varient.car_fuel_type', function($q) use ($request) {
                     $q->where('fuel_type', $request->fuel_type);
                 });
@@ -395,8 +395,13 @@ class CarController extends Controller
             // Get the number of items per page from the request, default to 10 if not provided
             $perPage = $request->input('per_page', 10);
 
+            // Sorting
+            if ($request->has('sorting') && !empty($request->sorting)) {
+                $query->orderBy('created_at', $request->sorting);
+            }
+
             // Paginate the results
-            $carDetails = $query->orderBy('created_at', 'desc')->paginate($perPage);
+            $carDetails = $query->paginate($perPage);
 
             if ($carDetails->isEmpty()) {
                 return ResponseHelper::error('No car details', 404);

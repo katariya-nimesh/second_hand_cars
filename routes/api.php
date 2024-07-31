@@ -57,7 +57,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/delete-notifications/{id}', [NotificationsController::class, 'destroy']);
 
     // get all cars
-    Route::get('/get-all-cars', [CarController::class, 'getAllCars']);
+    Route::post('/get-all-cars', [CarController::class, 'getAllCars']);
 
     // wishlist
     Route::post('/add-wishlist', [WishlistController::class, 'store']);
