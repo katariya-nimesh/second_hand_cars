@@ -41,7 +41,15 @@ class CarDetail extends Model
         return false;
     }
 
-    protected $appends = ['wishlist_status'];
+    public function getWishlistDetailsAttribute()
+    {
+        $user = Auth::user();
+        $wishlist = Wishlist::where('user_id', $user->id)->where('car_details_id', $this->id)->first();
+
+        return $wishlist;
+    }
+
+    protected $appends = ['wishlist_status', 'wishlist_details'];
 
     public function car_varient_type()
     {

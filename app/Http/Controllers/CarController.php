@@ -397,7 +397,15 @@ class CarController extends Controller
 
             // Sorting
             if ($request->has('sorting') && !empty($request->sorting)) {
-                $query->orderBy('created_at', $request->sorting);
+                $sorting = $request->sorting;
+
+                // Ensure the sorting parameter is either 'asc' or 'desc'
+                if (in_array($sorting, ['asc', 'desc'])) {
+                    $query->orderByRaw('CAST(price AS DECIMAL(10, 2)) ' . $sorting);
+                } else {
+                    // Handle invalid sorting parameter, maybe set a default or return an error
+                    $query->orderByRaw('CAST(price AS DECIMAL(10, 2)) asc'); // Default to ascending if sorting is invalid
+                }
             }
 
             // Paginate the results
@@ -432,6 +440,22 @@ class CarController extends Controller
             }
 
             return ResponseHelper::success($carFuelVariants, 'Car Fuel Variants retrieved successfully');
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function destroyCarDetails($id){
+        try{
+
+            $carDetails = CarDetail::find($id);
+
+            if (!$carDetails) {
+                return ResponseHelper::error('Car not found', 404);
+            }
+
+            $carDetails->delete();
+            return ResponseHelper::success(null, 'Car removed from car details successfully');
         } catch (\Exception $e) {
             return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }
