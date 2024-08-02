@@ -34,11 +34,11 @@
                         <li class="{{ request()->routeIs('car-fuel-varients.index') ? 'active' : '' }}">
                             <a href="{{ route('car-fuel-varients.index') }}">Car Fuel Varients</a>
                         </li>
-                        <li class="{{ request()->routeIs('car-kilometers.index') ? 'active' : '' }}">
-                            <a href="{{ route('car-kilometers.index') }}">Car Kilometers</a>
-                        </li>
                         <li class="{{ request()->routeIs('car-variant-types.index') ? 'active' : '' }}">
                             <a href="{{ route('car-variant-types.index') }}">Car Variant Types</a>
+                        </li>
+                        <li class="{{ request()->routeIs('car-kilometers.index') ? 'active' : '' }}">
+                            <a href="{{ route('car-kilometers.index') }}">Car Kilometers</a>
                         </li>
                         <li class="{{ request()->routeIs('car-owners.index') ? 'active' : '' }}">
                             <a href="{{ route('car-owners.index') }}">Car Owners</a>
