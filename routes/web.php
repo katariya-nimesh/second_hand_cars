@@ -9,6 +9,7 @@ use App\Http\Controllers\CarFuelVarientController;
 use App\Http\Controllers\CarVariantTypeController;
 use App\Http\Controllers\CarOwnerController;
 use App\Http\Controllers\CarKilometerController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -49,3 +50,6 @@ Route::resource('admin/car-fuel-varients', CarFuelVarientController::class);
 Route::resource('admin/car-variant-types', CarVariantTypeController::class);
 Route::resource('admin/car-owners', CarOwnerController::class);
 Route::resource('admin/car-kilometers', CarKilometerController::class);
+
+
+Route::get('vendor-profile/{id}', [UserController::class, 'vendorProfileWebPage']);

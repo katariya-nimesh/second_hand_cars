@@ -135,4 +135,21 @@ class UserController extends Controller
             return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }
     }
+
+    public function vendorProfileWebPage($id){
+        try {
+            // Find the vendor by ID
+            $vendor = User::where('user_type', 'vendor')->where('id', $id)->first();
+
+            // Check if the vendor exists
+            if (!$vendor) {
+                return ResponseHelper::error('Vendor not found', 404);
+            }
+
+            // Return the vendor profile
+            return ResponseHelper::success($vendor, 'Vendor profile retrieved successfully');
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
+    }
 }
