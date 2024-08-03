@@ -121,6 +121,7 @@ class UserController extends Controller
         try {
             // Get unique locations for vendors
             $locations = User::where('user_type', 'vendor')
+                ->whereNotNull('location')
                 ->distinct()
                 ->pluck('location');
 
