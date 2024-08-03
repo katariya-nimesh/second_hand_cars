@@ -76,4 +76,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Get fuel varient using varient id
     Route::get('car-fuel-varient-by-varient-id/{varientId}', [CarController::class, 'getCarFuelVarientByCarVarientId']);
+
+    // storeUserQr
+    Route::post('/store-user-qr', [UserController::class, 'storeUserQr']);
+
 });

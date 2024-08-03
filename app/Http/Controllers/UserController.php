@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Helpers\ResponseHelper;
 use App\Models\UserWallet;
 use App\Models\User;
+use App\Models\UserQR;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -149,6 +150,32 @@ class UserController extends Controller
 
             // Return the vendor profile
             return ResponseHelper::success($vendor, 'Vendor profile retrieved successfully');
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function storeUserQr(Request $request)
+    {
+        try{
+
+            $validator = Validator::make($request->all(), [
+                'user_id' => 'required|exists:users,id',
+                'qr_image' => 'required|image|max:2048' // Validate the uploaded file
+            ]);
+
+            if ($validator->fails()) {
+                return ResponseHelper::error($validator->errors(), 400);
+            }
+
+            $path = $request->file('qr_image')->store('public/qr_images');
+
+            $userQR = UserQR::create([
+                'user_id' => $request->user_id,
+                'qr_image' => $path
+            ]);
+
+            return ResponseHelper::success($userQR, 'QR user store successfully');
         } catch (\Exception $e) {
             return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }

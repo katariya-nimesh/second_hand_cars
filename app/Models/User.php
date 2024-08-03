@@ -62,4 +62,53 @@ class User extends Authenticatable
                 'car_kilometer',
                 'car_image',])->where('status', 'Active')->where('publish_status', 'Publish');
     }
+
+    public function user_qr()
+    {
+        return $this->belongsTo(UserQR::class);
+    }
+
+    public function getQrImagePathAttribute()
+    {
+        $qrImage = UserQR::where('user_id', $this->id)->first();
+        if($qrImage){
+            return $qrImage->qr_image ? asset($qrImage->qr_image) : null;
+        }
+        return null;
+    }
+
+    protected $appends = ['qr_image_path', 'profile_updated'];
+
+    public function getProfileUpdatedAttribute()
+    {
+        // Define the fields that need to be checked
+        $requiredFields = [
+            'name',
+            'email',
+            'phoneno',
+            'business_name',
+            'location',
+            'user_type',
+            'uid',
+            'fcm_token',
+            'image'
+        ];
+
+        // Retrieve the user
+        $user = User::find($this->id);
+
+        // Check if the user exists
+        if (!$user) {
+            return false;
+        }
+
+        // Check for missing fields using filled method
+        foreach ($requiredFields as $field) {
+            if (is_null($user->$field) || empty($user->$field)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
