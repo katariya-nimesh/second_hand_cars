@@ -169,10 +169,10 @@ class UserController extends Controller
             }
 
             $path = $request->file('qr_image')->store('public/qr_images');
-
+            
             $userQR = UserQR::create([
                 'user_id' => $request->user_id,
-                'qr_image' => $path
+                'qr_image' => Storage::url($path)
             ]);
 
             return ResponseHelper::success($userQR, 'QR user store successfully');
