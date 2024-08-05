@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CarVariantType;
 use App\Models\CarFuelVariant;
+use App\Models\CarBrand;
 use Illuminate\Http\Request;
 
 class CarVariantTypeController extends Controller
@@ -16,8 +17,9 @@ class CarVariantTypeController extends Controller
 
     public function create()
     {
+        $carBrands = CarBrand::all();
         $carFuelVariants = CarFuelVariant::all();
-        return view('admin.car-variant-types.create', compact('carFuelVariants'));
+        return view('admin.car-variant-types.create', compact('carBrands','carFuelVariants'));
     }
 
     public function store(Request $request)
@@ -34,8 +36,9 @@ class CarVariantTypeController extends Controller
 
     public function edit(CarVariantType $carVariantType)
     {
+        $carBrands = CarBrand::all();
         $carFuelVariants = CarFuelVariant::all();
-        return view('admin.car-variant-types.edit', compact('carVariantType', 'carFuelVariants'));
+        return view('admin.car-variant-types.edit', compact('carVariantType', 'carBrands', 'carFuelVariants'));
     }
 
     public function update(Request $request, CarVariantType $carVariantType)

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\CarFuelType;
 use App\Models\CarVariant;
+use App\Models\CarBrand;
+use App\Models\CarRegistrationYear;
 use Illuminate\Http\Request;
 
 class CarFuelTypeController extends Controller
@@ -16,8 +18,8 @@ class CarFuelTypeController extends Controller
 
     public function create()
     {
-        $carVarients = CarVariant::all();
-        return view('admin.car-fuel-types.create', compact('carVarients'));
+        $carBrands = CarBrand::all();
+        return view('admin.car-fuel-types.create', compact('carBrands'));
     }
 
     public function store(Request $request)
@@ -28,15 +30,19 @@ class CarFuelTypeController extends Controller
             'car_varient_id' => 'required|exists:car_varient,id',
         ]);
 
-        CarFuelType::create($request->all());
+        CarFuelType::create([
+            'fuel_type' => $request->fuel_type,
+            'transmission' => $request->transmission,
+            'car_varient_id' => $request->car_varient_id,
+        ]);
 
         return redirect()->route('car-fuel-types.index')->with('success', 'Car Fuel Type created successfully.');
     }
 
     public function edit(CarFuelType $carFuelType)
     {
-        $carVarients = CarVariant::all();
-        return view('admin.car-fuel-types.edit', compact('carFuelType', 'carVarients'));
+        $carBrands = CarBrand::all();
+        return view('admin.car-fuel-types.edit', compact('carFuelType', 'carBrands'));
     }
 
     public function update(Request $request, CarFuelType $carFuelType)
@@ -47,7 +53,11 @@ class CarFuelTypeController extends Controller
             'car_varient_id' => 'required|exists:car_varient,id',
         ]);
 
-        $carFuelType->update($request->all());
+        $carFuelType->update([
+            'fuel_type' => $request->fuel_type,
+            'transmission' => $request->transmission,
+            'car_varient_id' => $request->car_varient_id,
+        ]);
 
         return redirect()->route('car-fuel-types.index')->with('success', 'Car Fuel Type updated successfully.');
     }
@@ -58,5 +68,16 @@ class CarFuelTypeController extends Controller
 
         return redirect()->route('car-fuel-types.index')->with('success', 'Car Fuel Type deleted successfully.');
     }
+
+    public function getRegistrationYears(Request $request)
+    {
+        $carBrandId = $request->query('car_brand_id');
+        return CarRegistrationYear::where('car_brand_id', $carBrandId)->get();
+    }
+
+    public function getVariants(Request $request)
+    {
+        $carRegistrationYearId = $request->query('car_registration_year_id');
+        return CarVariant::where('car_registration_year_id', $carRegistrationYearId)->get();
+    }
 }
- 
