@@ -9,6 +9,7 @@ use App\Http\Controllers\CarFuelVarientController;
 use App\Http\Controllers\CarVariantTypeController;
 use App\Http\Controllers\CarOwnerController;
 use App\Http\Controllers\CarKilometerController;
+use App\Http\Controllers\CarSetupController;
 use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
@@ -25,22 +26,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// // Car Brand Routes
-// Route::get('admin/car-brands', [CarBrandController::class, 'index'])->name('car-brands.index');
-// Route::get('admin/car-brands/create', [CarBrandController::class, 'create'])->name('car-brands.create');
-// Route::post('admin/car-brands', [CarBrandController::class, 'store'])->name('car-brands.store');
-// Route::get('admin/car-brands/{id}/edit', [CarBrandController::class, 'edit'])->name('car-brands.edit');
-// Route::put('admin/car-brands/{id}', [CarBrandController::class, 'update'])->name('car-brands.update');
-// Route::delete('admin/car-brands/{id}', [CarBrandController::class, 'destroy'])->name('car-brands.destroy');
-
-// // Car Registration Year Routes
-// Route::get('admin/car-registration-years', [CarRegistrationYearController::class, 'index'])->name('car-registration-years.index');
-// Route::get('admin/car-registration-years/create', [CarRegistrationYearController::class, 'create'])->name('car-registration-years.create');
-// Route::post('admin/car-registration-years', [CarRegistrationYearController::class, 'store'])->name('car-registration-years.store');
-// Route::get('admin/car-registration-years/{id}/edit', [CarRegistrationYearController::class, 'edit'])->name('car-registration-years.edit');
-// Route::put('admin/car-registration-years/{id}', [CarRegistrationYearController::class, 'update'])->name('car-registration-years.update');
-// Route::delete('admin/car-registration-years/{id}', [CarRegistrationYearController::class, 'destroy'])->name('car-registration-years.destroy');
-
 Route::resource('admin/car-brands', CarBrandController::class);
 Route::resource('admin/car-registration-years', CarRegistrationYearController::class);
 Route::resource('admin/car-varients', CarVarientController::class);
@@ -50,6 +35,17 @@ Route::resource('admin/car-fuel-varients', CarFuelVarientController::class);
 Route::resource('admin/car-variant-types', CarVariantTypeController::class);
 Route::resource('admin/car-owners', CarOwnerController::class);
 Route::resource('admin/car-kilometers', CarKilometerController::class);
+Route::get('/api/get-registration-years', [CarFuelTypeController::class, 'getRegistrationYears']);
+Route::get('/api/get-variants', [CarFuelTypeController::class, 'getVariants']);
+
+Route::get('api/registration-years/{carBrandId}', [CarFuelVarientController::class, 'getRegistrationYears'])->name('api.registration-years');
+Route::get('api/variants/{carRegistrationYearId}', [CarFuelVarientController::class, 'getVariants'])->name('api.variants');
+Route::get('api/fueltypes/{variantId}', [CarFuelVarientController::class, 'getFuelTypes'])->name('api.fuelTypes');
+
+Route::get('api/fuelvarients/{fuelTypeId}', [CarFuelVarientController::class, 'getFuelTypesVarient'])->name('api.fuelVarient');
+
+Route::get('car-setup/create', [CarSetupController::class, 'create'])->name('car-setup.create');
+Route::post('car-setup/store', [CarSetupController::class, 'store'])->name('car-setup.store');
 
 
 Route::get('vendor-profile/{id}', [UserController::class, 'vendorProfileWebPage']);
