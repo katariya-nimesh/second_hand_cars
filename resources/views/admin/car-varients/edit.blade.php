@@ -3,11 +3,9 @@
 @section('content')
     <h2>Edit Car Varient</h2>
 
-    <form action="{{ route('update-varients') }}" method="POST">
+    <form action="{{ route('car-varients.update', $carVarient->id) }}" method="POST">
         @csrf
-        @method('POST')
-        <input type="text" hidden name="id" id="id" value="{{ $carVarient->id }}">
-
+        @method('PUT')
         <div>
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" value="{{ $carVarient->name }}" required>

@@ -3,12 +3,10 @@
 @section('content')
 <div class="container">
     <h1>Edit Car Brand</h1>
-    <form action="{{ route('update-brands') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('car-brands.update', $carBrand->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
-        @method('POST')
+        @method('PUT')
         <div>
-            <input type="text" hidden name="id" id="id" value="{{ $carBrand->id }}">
-
             <label for="name">Name:</label>
             <input type="text" name="name" id="name" value="{{ old('name', $carBrand->name) }}">
             @error('name')
