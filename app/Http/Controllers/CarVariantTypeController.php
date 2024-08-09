@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\CarVariantType;
 use App\Models\CarFuelVariant;
 use App\Models\CarBrand;
+use App\Models\CarFuelType;
+use App\Models\CarRegistrationYear;
+use App\Models\CarVariant;
 use Illuminate\Http\Request;
 
 class CarVariantTypeController extends Controller
@@ -19,7 +22,7 @@ class CarVariantTypeController extends Controller
     {
         $carBrands = CarBrand::all();
         $carFuelVariants = CarFuelVariant::all();
-        return view('admin.car-variant-types.create', compact('carBrands','carFuelVariants'));
+        return view('admin.car-variant-types.create', compact('carBrands', 'carFuelVariants'));
     }
 
     public function store(Request $request)
@@ -31,32 +34,37 @@ class CarVariantTypeController extends Controller
 
         CarVariantType::create($request->all());
 
-        return redirect()->route('car-variant-types.index')->with('success', 'Car Variant Type created successfully.');
+        return redirect()->route('manage-variant-types')->with('success', 'Car Variant Type created successfully.');
     }
 
-    public function edit(CarVariantType $carVariantType)
+    public function edit($id)
     {
+        $carVariantType = CarVariantType::find($id);
         $carBrands = CarBrand::all();
+        $yearSelect = CarRegistrationYear::all();
+        $variantSelect = CarVariant::all();
+        $fuelTypeSelect = CarFuelType::all();
         $carFuelVariants = CarFuelVariant::all();
-        return view('admin.car-variant-types.edit', compact('carVariantType', 'carBrands', 'carFuelVariants'));
+        return view('admin.car-variant-types.edit', compact('carVariantType', 'carBrands','yearSelect','variantSelect','fuelTypeSelect', 'carFuelVariants'));
     }
 
-    public function update(Request $request, CarVariantType $carVariantType)
+    public function update(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'car_fuel_varient_id' => 'required|exists:car_fuel_varient,id',
         ]);
 
+        $carVariantType = CarVariantType::find($request->id);
         $carVariantType->update($request->all());
 
-        return redirect()->route('car-variant-types.index')->with('success', 'Car Variant Type updated successfully.');
+        return redirect()->route('manage-variant-types')->with('success', 'Car Variant Type updated successfully.');
     }
 
-    public function destroy(CarVariantType $carVariantType)
+    public function destroy(Request $request)
     {
-        $carVariantType->delete();
+        CarVariantType::find($request->id)->delete();
 
-        return redirect()->route('car-variant-types.index')->with('success', 'Car Variant Type deleted successfully.');
+        return redirect()->route('manage-variant-types')->with('success', 'Car Variant Type deleted successfully.');
     }
 }

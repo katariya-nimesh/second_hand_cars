@@ -2,7 +2,7 @@
 
 @section('content')
     <h2>Car Fuel Types</h2>
-    <a href="{{ route('car-fuel-types.create') }}" class="button edit">Create New Car Fuel Type</a>
+    <a href="{{ route('create-fuel-types') }}" class="button edit">Create New Car Fuel Type</a>
     <table>
         <thead>
             <tr>
@@ -21,10 +21,10 @@
                     <td>{{ $fuelType->transmission }}</td>
                     <td>{{ optional($fuelType->car_varient)->name ?? 'N/A' }}</td>
                     <td>
-                        <a href="{{ route('car-fuel-types.edit', $fuelType->id) }}" class="button edit">Edit</a>
-                        <form action="{{ route('car-fuel-types.destroy', $fuelType->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route('edit-fuel-types', $fuelType->id) }}" class="button edit">Edit</a>
+                        <form action="{{ route('delete-fuel-types',['id' => $fuelType->id]) }}" method="POST" style="display:inline;">
                             @csrf
-                            @method('DELETE')
+                            @method('POST')
                             <button type="submit" class="button delete">Delete</button>
                         </form>
                     </td>

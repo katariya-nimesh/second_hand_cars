@@ -3,9 +3,11 @@
 @section('content')
     <h2>Edit Car Kilometer Range</h2>
 
-    <form action="{{ route('car-kilometers.update', $carKilometer->id) }}" method="POST">
+    <form action="{{ route('update-kilometers') }}" method="POST">
     @csrf
-    @method('PUT')
+    @method('POST')
+    <input type="text" hidden name="id" id="id" value="{{ $carKilometer->id }}">
+
     <label for="start_km">Start KM:</label>
     <input type="number" id="start_km" name="start_km" value="{{ old('start_km', $carKilometer->start_km) }}" required>
     <br>
