@@ -3,7 +3,7 @@
 @section('content')
     <h2>Create Car Owner</h2>
 
-    <form action="{{ route('add-owners') }}" method="POST">
+    <form action="{{ route('car-owners.store') }}" method="POST">
         @csrf
         <div>
             <label for="name">Name:</label>
