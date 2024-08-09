@@ -3,7 +3,7 @@
 @section('content')
     <h2>Create Car Kilometer Range</h2>
 
-    <form action="{{ route('car-kilometers.store') }}" method="POST">
+    <form action="{{ route('add-kilometers') }}" method="POST">
     @csrf
     <label for="start_km">Start KM:</label>
     <input type="number" id="start_km" name="start_km" value="{{ old('start_km') }}" required>
