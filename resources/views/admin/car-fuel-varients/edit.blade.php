@@ -3,9 +3,11 @@
 @section('content')
     <h2>Edit Car Fuel Variant</h2>
 
-    <form action="{{ route('car-fuel-varients.update', $carFuelVarient->id) }}" method="POST">
+    <form action="{{ route('update-fuel-varients') }}" method="POST">
         @csrf
-        @method('PUT')
+        @method('POST')
+        <input type="text" hidden name="id" id="id" value="{{ $carFuelVarient->id }}">
+
         <div>
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" value="{{ $carFuelVarient->name }}" required>
@@ -14,10 +16,10 @@
         <div>
             <label for="car_brand_id">Car Brand:</label>
             <select id="car_brand_id" name="car_brand_id" required>
-                <option value="">Select Car Brand</option>
+                {{-- <option value="" disabled>Select Car Brand</option> --}}
                 @foreach($carBrands as $brand)
-                    <option value="{{ $brand->id }}" {{ $carFuelVarient->car_brand_id == $brand->id ? 'selected' : '' }}>
-                        {{ $brand->brand_name }}
+                    <option value="{{ $brand->id }}" {{ $carFuelVarient->car_fuel_type->car_varient->car_registration_year->car_brand->id == $brand->id ? 'selected' : '' }}>
+                        {{ $brand->name }}
                     </option>
                 @endforeach
             </select>
@@ -28,7 +30,7 @@
             <select id="car_registration_year_id" name="car_registration_year_id" required>
                 <option value="">Select Registration Year</option>
                 @foreach($carRegistrationYears as $year)
-                    <option value="{{ $year->id }}" {{ $carFuelVarient->car_registration_year_id == $year->id ? 'selected' : '' }}>
+                    <option value="{{ $year->id }}" {{ $carFuelVarient->car_fuel_type->car_varient->car_registration_year->id == $year->id ? 'selected' : '' }}>
                         {{ $year->year }}
                     </option>
                 @endforeach
@@ -40,8 +42,8 @@
             <select id="car_variant_id" name="car_variant_id" required>
                 <option value="">Select Car Variant</option>
                 @foreach($carVariants as $variant)
-                    <option value="{{ $variant->id }}" {{ $carFuelVarient->car_variant_id == $variant->id ? 'selected' : '' }}>
-                        {{ $variant->variant_name }}
+                    <option value="{{ $variant->id }}" {{ $carFuelVarient->car_fuel_type->car_varient->id == $variant->id ? 'selected' : '' }}>
+                        {{ $variant->name }}
                     </option>
                 @endforeach
             </select>
@@ -52,7 +54,7 @@
             <select id="car_fuel_type_id" name="car_fuel_type_id" required>
                 <option value="">Select Fuel Type</option>
                 @foreach($carFuelTypes as $fuelType)
-                    <option value="{{ $fuelType->id }}" {{ $carFuelVarient->car_fuel_type_id == $fuelType->id ? 'selected' : '' }}>
+                    <option value="{{ $fuelType->id }}" {{ $carFuelVarient->car_fuel_type->id == $fuelType->id ? 'selected' : '' }}>
                         {{ $fuelType->fuel_type }}
                     </option>
                 @endforeach
@@ -63,52 +65,66 @@
     </form>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const brandSelect = document.getElementById('car_brand_id');
-            const yearSelect = document.getElementById('car_registration_year_id');
-            const variantSelect = document.getElementById('car_variant_id');
-            const fuelTypeSelect = document.getElementById('car_fuel_type_id');
+       $(document).ready(function() {
+        var baseUrl = '{{ url('/') }}';
 
-            brandSelect.addEventListener('change', function() {
-                const brandId = this.value;
-                fetch(`/api/registration-years/${brandId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        yearSelect.innerHTML = '<option value="">Select Registration Year</option>';
-                        data.forEach(year => {
-                            yearSelect.innerHTML += `<option value="${year.id}">${year.year}</option>`;
-                        });
-                    });
-            });
+    const $brandSelect = $('#car_brand_id');
+    const $yearSelect = $('#car_registration_year_id');
+    const $variantSelect = $('#car_variant_id');
+    const $fuelTypeSelect = $('#car_fuel_type_id');
 
-            yearSelect.addEventListener('change', function() {
-                const yearId = this.value;
-                fetch(`/api/variants/${yearId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        variantSelect.innerHTML = '<option value="">Select Car Variant</option>';
-                        data.forEach(variant => {
-                            variantSelect.innerHTML += `<option value="${variant.id}">${variant.variant_name}</option>`;
-                        });
-                    });
-            });
+    $brandSelect.on('change', function() {
+        const brandId = $(this).val();
+        $.ajax({
+            url: baseUrl + `/api/registration-years/${brandId}`,
+            method: 'GET',
+            success: function(data) {
+                $yearSelect.html('<option selected disabled  value="">Select Registration Year</option>');
+                data.forEach(year => {
+                    $yearSelect.append(`<option value="${year.id}">${year.year}</option>`);
+                });
 
-            variantSelect.addEventListener('change', function() {
-                const variantId = this.value;
-                fetch(`/api/fuel-types/${variantId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        fuelTypeSelect.innerHTML = '<option value="">Select Fuel Type</option>';
-                        data.forEach(fuelType => {
-                            fuelTypeSelect.innerHTML += `<option value="${fuelType.id}">${fuelType.fuel_type}</option>`;
-                        });
-                    });
-            });
-
-            // Trigger change event to populate fields based on selected options
-            brandSelect.dispatchEvent(new Event('change'));
-            yearSelect.dispatchEvent(new Event('change'));
-            variantSelect.dispatchEvent(new Event('change'));
+                $variantSelect.html('<option selected disabled value="">Select Car Variant</option>');
+                $fuelTypeSelect.html('<option selected disabled value="">Select Fuel Type</option>');
+            }
         });
+    });
+
+    $yearSelect.on('change', function() {
+        const yearId = $(this).val();
+        $.ajax({
+            url: baseUrl + `/api/variants/${yearId}`,
+            method: 'GET',
+            success: function(data) {
+                $variantSelect.html('<option selected disabled value="">Select Car Variant</option>');
+                data.forEach(variant => {
+                    $variantSelect.append(`<option value="${variant.id}">${variant.name}</option>`);
+                });
+                $fuelTypeSelect.html('<option selected disabled value="">Select Fuel Type</option>');
+
+            }
+        });
+    });
+
+    $variantSelect.on('change', function() {
+        const variantId = $(this).val();
+        $.ajax({
+            url: baseUrl + `/api/fueltypes/${variantId}`,
+            method: 'GET',
+            success: function(data) {
+                $fuelTypeSelect.html('<option selected disabled value="">Select Fuel Type</option>');
+                data.forEach(fuelType => {
+                    $fuelTypeSelect.append(`<option value="${fuelType.id}">${fuelType.fuel_type}</option>`);
+                });
+            }
+        });
+    });
+
+    // Trigger change events to populate fields based on selected options
+    // $brandSelect.trigger('change');
+    // $yearSelect.trigger('change');
+    // $variantSelect.trigger('change');
+});
+
     </script>
 @endsection
