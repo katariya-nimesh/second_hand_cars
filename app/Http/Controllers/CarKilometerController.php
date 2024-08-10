@@ -29,9 +29,13 @@ class CarKilometerController extends Controller
         $end_km = $request->input('end_km');
 
         // Check if the new range overlaps with existing ranges
-        $overlappingRange = CarKilometer::where(function ($query) use ($start_km, $end_km) {
+        $overlappingRange = CarKilometer::where(function ($query) use ($start_km,$end_km) {
             $query->whereBetween('start_km', [$start_km, $end_km])
-                  ->orWhereBetween('end_km', [$start_km, $end_km]);
+                  ->orWhereBetween('end_km', [$start_km, $end_km])
+                  ->orWhere(function ($query) use ($start_km,$end_km) {
+                      $query->where('start_km', '<=', $start_km)
+                            ->where('end_km', '>=', $end_km);
+                  });
         })->exists();
 
         if ($overlappingRange) {
@@ -77,7 +81,7 @@ class CarKilometerController extends Controller
                       $query->where('start_km', '<=', $start_km)
                             ->where('end_km', '>=', $end_km);
                   });
-        })->exists();
+        })->where('id',"!=",$request->id)->exists();
 
         if ($overlappingRanges) {
             return redirect()->back()->withInput()->withErrors(['start_km' => 'The kilometer range overlaps with an existing range.']);

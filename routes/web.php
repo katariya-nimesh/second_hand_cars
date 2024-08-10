@@ -121,5 +121,4 @@ Route::middleware(['Authenticated', 'prevent-back-history'])->group(function () 
 
 
     Route::get('vendor-profile/{id}', [UserController::class, 'vendorProfileWebPage']);
-
 });

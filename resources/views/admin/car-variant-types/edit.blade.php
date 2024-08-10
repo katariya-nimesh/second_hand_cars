@@ -87,6 +87,9 @@ $(document).ready(function() {
                 data.forEach(year => {
                     $yearSelect.append(`<option value="${year.id}" ${year.id == yearId ? 'selected' : ''}>${year.year}</option>`);
                 });
+                $variantSelect.html('<option selected disabled value="">Select Car Variant</option>');
+                $fuelTypeSelect.html('<option selected disabled value="">Select Fuel Type</option>');
+                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Variant</option>');
             },
             error: function(error) {
                 console.error('Error fetching registration years:', error);
@@ -104,6 +107,8 @@ $(document).ready(function() {
                 data.forEach(variant => {
                     $variantSelect.append(`<option value="${variant.id}" ${variant.id == variantId ? 'selected' : ''}>${variant.name}</option>`);
                 });
+                $fuelTypeSelect.html('<option selected disabled value="">Select Fuel Type</option>');
+                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Variant</option>');
             },
             error: function(error) {
                 console.error('Error fetching car variants:', error);
@@ -121,6 +126,8 @@ $(document).ready(function() {
                 data.forEach(fuelType => {
                     $fuelTypeSelect.append(`<option value="${fuelType.id}" ${fuelType.id == fuelTypeId ? 'selected' : ''}>${fuelType.fuel_type} - ${fuelType.transmission}</option>`);
                 });
+                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Variant</option>');
+
             },
             error: function(error) {
                 console.error('Error fetching fuel types:', error);

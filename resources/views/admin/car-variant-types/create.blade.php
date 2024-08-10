@@ -37,7 +37,7 @@
         <div>
             <label for="car_fuel_type_id">Fuel Type:</label>
             <select id="car_fuel_type_id" name="car_fuel_type_id" required>
-                <option value="">Select Fuel Types</option>
+                <option value="">Select Fuel Type</option>
             </select>
         </div>
 
@@ -74,7 +74,7 @@ $(document).ready(function() {
                 });
                 $variantSelect.html('<option selected disabled value="">Select Car Variant</option>');
                 $fuelTypeSelect.html('<option selected disabled value="">Select Fuel Type</option>');
-                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Type Varient</option>');
+                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Variant</option>');
             },
             error: function(error) {
                 console.error('Error fetching registration years:', error);
@@ -93,7 +93,7 @@ $(document).ready(function() {
                     $variantSelect.append(`<option value="${variant.id}">${variant.name}</option>`);
                 });
                 $fuelTypeSelect.html('<option selected disabled value="">Select Fuel Type</option>');
-                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Type Varient</option>');
+                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Variant</option>');
             },
             error: function(error) {
                 console.error('Error fetching car variants:', error);
@@ -111,7 +111,7 @@ $(document).ready(function() {
                 data.forEach(fuelType => {
                     $fuelTypeSelect.append(`<option value="${fuelType.id}">${fuelType.fuel_type} - ${fuelType.transmission}</option>`);
                 });
-                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Type Varient</option>');
+                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Variant</option>');
 
             },
             error: function(error) {
@@ -126,7 +126,7 @@ $(document).ready(function() {
             url: baseUrl + `/api/fuelvarients/${fueltypeId}`,
             method: 'GET',
             success: function(data) {
-                $fuelVarientSelect.html('<option value="">Select Fuel Type Varient</option>');
+                $fuelVarientSelect.html('<option value="">Select Fuel Type Variant</option>');
                 data.forEach(fuelType => {
                     $fuelVarientSelect.append(`<option value="${fuelType.id}">${fuelType.name}</option>`);
                 });
