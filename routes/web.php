@@ -12,6 +12,7 @@ use App\Http\Controllers\CarKilometerController;
 use App\Http\Controllers\CarSetupController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\PushNotificationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -121,3 +122,9 @@ Route::middleware(['Authenticated', 'prevent-back-history'])->group(function () 
 
 
     Route::get('vendor-profile/{id}', [UserController::class, 'vendorProfileWebPage']);
+
+    Route::get('/send-notification', [PushNotificationsController::class, 'showForm'])->name('send.notification.form');
+    // Route::post('/send-notification', [PushNotificationsController::class, 'sendNotification'])->name('send.notification');
+    Route::post('/send-notification', [PushNotificationsController::class, 'sendTopicNotification'])->name('send.notification');
+
+});
