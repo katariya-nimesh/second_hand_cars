@@ -55,8 +55,7 @@ class NotificationsController extends Controller
 
             if ($notification) {
                 $notification->delete();
-                return response()->json(['message' => 'Notification deleted successfully'], 200);
-                return ResponseHelper::success('Notification deleted successfully');
+                return ResponseHelper::success(null, 'Notification deleted successfully');
             }
 
             return ResponseHelper::error('Notification not found', 404);
