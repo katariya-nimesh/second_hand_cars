@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\UserWalletTransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,5 +80,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // storeUserQr
     Route::post('/store-user-qr', [UserController::class, 'storeUserQr']);
+
+    // Transaction
+    Route::apiResource('wallet-transactions', UserWalletTransactionController::class);
 
 });
