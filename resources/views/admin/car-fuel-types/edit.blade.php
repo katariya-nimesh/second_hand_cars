@@ -3,9 +3,11 @@
 @section('content')
     <h2>Edit Car Fuel Type</h2>
 
-    <form action="{{ route('car-fuel-types.update', $carFuelType->id) }}" method="POST">
+    <form action="{{ route('update-fuel-types') }}" method="POST">
         @csrf
-        @method('PUT')
+        @method('POST')
+        <input type="text" hidden name="id" id="id" value="{{ $carFuelType->id }}">
+
         <div>
             <label for="fuel_type">Fuel Type:</label>
             <input type="text" id="fuel_type" name="fuel_type" value="{{ $carFuelType->fuel_type }}" required>
@@ -34,66 +36,92 @@
             <select id="car_varient_id" name="car_varient_id" required>
                 <option value="">Select Car Variant</option>
             </select>
+            @error('car_varient_id')
+            <div>{{ $message }}</div>
+        @enderror
         </div>
         <button type="submit">Update</button>
     </form>
 
     <script>
-        document.getElementById('car_brand_id').addEventListener('change', function() {
-            var brandId = this.value;
-            fetch(`/api/get-registration-years?car_brand_id=${brandId}`)
-                .then(response => response.json())
-                .then(data => {
-                    var yearSelect = document.getElementById('car_registration_year_id');
-                    yearSelect.innerHTML = '<option value="">Select Registration Year</option>';
-                    data.forEach(function(year) {
-                        yearSelect.innerHTML += `<option value="${year.id}">${year.year}</option>`;
-                    });
+        var baseUrl = '{{ url('/') }}';
+
+       // Event listener for car brand change
+$('#car_brand_id').on('change', function() {
+    var brandId = $(this).val();
+    $.ajax({
+        url: baseUrl + `/api/get-registration-years`,
+        data: { car_brand_id: brandId },
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            var yearSelect = $('#car_registration_year_id');
+            yearSelect.html('<option value="">Select Registration Year</option>');
+            $.each(data, function(index, year) {
+                yearSelect.append(`<option value="${year.id}">${year.year}</option>`);
+            });
+            $('#car_varient_id').html('<option selected disabled value="">Select Car Variant</option>');
+
+        }
+    });
+});
+
+// Event listener for registration year change
+$('#car_registration_year_id').on('change', function() {
+    var yearId = $(this).val();
+    $.ajax({
+        url: baseUrl + `/api/get-variants`,
+        data: { car_registration_year_id: yearId },
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            var variantSelect = $('#car_varient_id');
+            variantSelect.html('<option value="">Select Car Variant</option>');
+            $.each(data, function(index, variant) {
+                variantSelect.append(`<option value="${variant.id}">${variant.name}</option>`);
+            });
+        }
+    });
+});
+
+// Pre-populate year and variant select fields if editing
+$(document).ready(function() {
+    var brandId = $('#car_brand_id').val();
+    var yearId = {{ $carFuelType->car_varient->car_registration_year_id }};
+    var variantId = {{ $carFuelType->car_varient_id }};
+
+    if (brandId) {
+        $.ajax({
+            url: baseUrl + `/api/get-registration-years`,
+            data: { car_brand_id: brandId },
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var yearSelect = $('#car_registration_year_id');
+                yearSelect.html('<option value="">Select Registration Year</option>');
+                $.each(data, function(index, year) {
+                    yearSelect.append(`<option value="${year.id}" ${year.id == yearId ? 'selected' : ''}>${year.year}</option>`);
                 });
+            }
         });
+    }
 
-        document.getElementById('car_registration_year_id').addEventListener('change', function() {
-            var yearId = this.value;
-            fetch(`/api/get-variants?car_registration_year_id=${yearId}`)
-                .then(response => response.json())
-                .then(data => {
-                    var variantSelect = document.getElementById('car_varient_id');
-                    variantSelect.innerHTML = '<option value="">Select Car Variant</option>';
-                    data.forEach(function(variant) {
-                        variantSelect.innerHTML += `<option value="${variant.id}">${variant.name}</option>`;
-                    });
+    if (yearId) {
+        $.ajax({
+            url: baseUrl + `/api/get-variants`,
+            data: { car_registration_year_id: yearId },
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                var variantSelect = $('#car_varient_id');
+                variantSelect.html('<option value="">Select Car Variant</option>');
+                $.each(data, function(index, variant) {
+                    variantSelect.append(`<option value="${variant.id}" ${variant.id == variantId ? 'selected' : ''}>${variant.name}</option>`);
                 });
-        });
-
-        // Pre-populate year and variant select fields if editing
-        document.addEventListener('DOMContentLoaded', function() {
-            var brandId = document.getElementById('car_brand_id').value;
-            var yearId = {{ $carFuelType->car_varient->car_registration_year_id }};
-            var variantId = {{ $carFuelType->car_varient_id }};
-
-            if (brandId) {
-                fetch(`/api/get-registration-years?car_brand_id=${brandId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        var yearSelect = document.getElementById('car_registration_year_id');
-                        yearSelect.innerHTML = '<option value="">Select Registration Year</option>';
-                        data.forEach(function(year) {
-                            yearSelect.innerHTML += `<option value="${year.id}" ${year.id == yearId ? 'selected' : ''}>${year.year}</option>`;
-                        });
-                    });
-            }
-
-            if (yearId) {
-                fetch(`/api/get-variants?car_registration_year_id=${yearId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        var variantSelect = document.getElementById('car_varient_id');
-                        variantSelect.innerHTML = '<option value="">Select Car Variant</option>';
-                        data.forEach(function(variant) {
-                            variantSelect.innerHTML += `<option value="${variant.id}" ${variant.id == variantId ? 'selected' : ''}>${variant.name}</option>`;
-                        });
-                    });
             }
         });
+    }
+});
+
     </script>
 @endsection

@@ -26,29 +26,31 @@ class CarOwnerController extends Controller
 
         CarOwner::create($request->all());
 
-        return redirect()->route('car-owners.index')->with('success', 'Car Owner created successfully.');
+        return redirect()->route('manage-owners')->with('success', 'Car Owner created successfully.');
     }
 
-    public function edit(CarOwner $carOwner)
+    public function edit($id)
     {
+        $carOwner = CarOwner::find($id);
         return view('admin.car-owners.edit', compact('carOwner'));
     }
 
-    public function update(Request $request, CarOwner $carOwner)
+    public function update(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
+        $carOwner = CarOwner::find($request->id);
         $carOwner->update($request->all());
 
-        return redirect()->route('car-owners.index')->with('success', 'Car Owner updated successfully.');
+        return redirect()->route('manage-owners')->with('success', 'Car Owner updated successfully.');
     }
 
-    public function destroy(CarOwner $carOwner)
+    public function destroy(Request $request)
     {
-        $carOwner->delete();
+        CarOwner::find($request->id)->delete();
 
-        return redirect()->route('car-owners.index')->with('success', 'Car Owner deleted successfully.');
+        return redirect()->route('manage-owners')->with('success', 'Car Owner deleted successfully.');
     }
 }

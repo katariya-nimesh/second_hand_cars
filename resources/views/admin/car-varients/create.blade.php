@@ -3,11 +3,14 @@
 @section('content')
     <h2>Create Car Varient</h2>
 
-    <form action="{{ route('car-varients.store') }}" method="POST">
+    <form action="{{ route('add-varients') }}" method="POST">
         @csrf
         <div>
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
+            @error('name')
+            <div>{{ $message }}</div>
+        @enderror
         </div>
         <div>
             <label for="car_brand_id">Car Brand:</label>
