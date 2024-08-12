@@ -1,15 +1,17 @@
 @extends('layouts.admin')
 
 @section('content')
+<div style="display: flex;justify-content: space-between;">
     <h2>Car Brands</h2>
-    <a href="{{ route('car-brands.create') }}" class="button">Create New Car Brand</a>
+    <a style="padding: 12px 10px;margin: 12px;background-color:#4476FB; text-decoration:none;font-size: small;border-radius: 8px;" href="{{ route('create-brands') }}" class="button">Create New Car Brand</a>
+</div>
     <table>
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Image</th>
-                <th>Actions</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -25,12 +27,15 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('car-brands.edit', $brand->id) }}" class="button">Edit</a>
-                        <form action="{{ route('car-brands.destroy', $brand->id) }}" method="POST" style="display:inline;">
+                        <select name="select" id="select">
+                            <option value="">Select</option>
+                        </select>
+                        {{-- <a href="{{ route('edit-brands', $brand->id) }}" class="button">Edit</a>
+                        <form action="{{ route('delete-brands', [ 'id'=>$brand->id]) }}" method="POST" style="display:inline;">
                             @csrf
-                            @method('DELETE')
+                            @method('POST')
                             <button type="submit" class="button delete">Delete</button>
-                        </form>
+                        </form> --}}
                     </td>
                 </tr>
             @endforeach

@@ -27,7 +27,7 @@ class CarFuelTypeController extends Controller
         $request->validate([
             'fuel_type' => 'required|string|max:255',
             'transmission' => 'required|string|max:255',
-            'car_varient_id' => 'required|exists:car_varient,id',
+            'car_varient_id' => 'required|exists:car_varient,id|unique:car_fuel_type,car_varient_id,NULL,id,fuel_type,' . $request->fuel_type . ',transmission,' . $request->transmission,
         ]);
 
         CarFuelType::create([
@@ -36,22 +36,25 @@ class CarFuelTypeController extends Controller
             'car_varient_id' => $request->car_varient_id,
         ]);
 
-        return redirect()->route('car-fuel-types.index')->with('success', 'Car Fuel Type created successfully.');
+        return redirect()->route('manage-fuel-types')->with('success', 'Car Fuel Type created successfully.');
     }
 
-    public function edit(CarFuelType $carFuelType)
+    public function edit($id)
     {
+        $carFuelType = CarFuelType::find($id);
         $carBrands = CarBrand::all();
         return view('admin.car-fuel-types.edit', compact('carFuelType', 'carBrands'));
     }
 
-    public function update(Request $request, CarFuelType $carFuelType)
+    public function update(Request $request)
     {
         $request->validate([
             'fuel_type' => 'required|string|max:255',
             'transmission' => 'required|string|max:255',
-            'car_varient_id' => 'required|exists:car_varient,id',
+            'car_varient_id' => 'required|exists:car_varient,id|unique:car_fuel_type,car_varient_id,' . $request->id . ',id,fuel_type,' . $request->fuel_type . ',transmission,' . $request->transmission,
         ]);
+
+        $carFuelType = CarFuelType::find($request->id);
 
         $carFuelType->update([
             'fuel_type' => $request->fuel_type,
@@ -59,14 +62,14 @@ class CarFuelTypeController extends Controller
             'car_varient_id' => $request->car_varient_id,
         ]);
 
-        return redirect()->route('car-fuel-types.index')->with('success', 'Car Fuel Type updated successfully.');
+        return redirect()->route('manage-fuel-types')->with('success', 'Car Fuel Type updated successfully.');
     }
 
-    public function destroy(CarFuelType $carFuelType)
+    public function destroy(Request $request)
     {
-        $carFuelType->delete();
+        CarFuelType::find($request->id)->delete();
 
-        return redirect()->route('car-fuel-types.index')->with('success', 'Car Fuel Type deleted successfully.');
+        return redirect()->route('manage-fuel-types')->with('success', 'Car Fuel Type deleted successfully.');
     }
 
     public function getRegistrationYears(Request $request)
