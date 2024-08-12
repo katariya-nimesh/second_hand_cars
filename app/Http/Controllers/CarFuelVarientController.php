@@ -36,40 +36,38 @@ class CarFuelVarientController extends Controller
 
         CarFuelVariant::create($request->all());
 
-        return redirect()->route('manage-fuel-varients')->with('success', 'Car Fuel Variant created successfully.');
+        return redirect()->route('car-fuel-varients.index')->with('success', 'Car Fuel Variant created successfully.');
     }
 
-    public function edit($id)
+    public function edit(CarFuelVariant $carFuelVarient)
     {
-        $carFuelVarient = CarFuelVariant::find($id);
         $carBrands = CarBrand::all();
         $carFuelTypes = CarFuelType::all();
-        $carRegistrationYears = CarRegistrationYear::where('car_brand_id', $carFuelVarient->car_fuel_type->car_varient->car_registration_year->car_brand->id)->get();
-        $carVariants = CarVariant::where('car_registration_year_id', $carFuelVarient->car_fuel_type->car_varient->car_registration_year->id)->get();
+        $carRegistrationYears = CarRegistrationYear::where('car_brand_id', $carFuelVarient->car_brand_id)->get();
+        $carVariants = CarVariant::where('car_registration_year_id', $carFuelVarient->car_registration_year_id)->get();
         return view('admin.car-fuel-varients.edit', compact('carFuelVarient', 'carFuelTypes', 'carBrands', 'carRegistrationYears', 'carVariants'));
     }
 
-    public function update(Request $request)
+    public function update(Request $request, CarFuelVariant $carFuelVarient)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'car_fuel_type_id' => 'required|exists:car_fuel_type,id',
-            'car_variant_id' => 'required|exists:car_varient,id',
+            'car_fuel_type_id' => 'required|exists:car_fuel_types,id',
+            'car_variant_id' => 'required|exists:car_variants,id',
             'car_registration_year_id' => 'required|exists:car_registration_years,id',
-            'car_brand_id' => 'required|exists:car_brand,id',
+            'car_brand_id' => 'required|exists:car_brands,id',
         ]);
 
-        $carFuelVarient = CarFuelVariant::find($request->id);
         $carFuelVarient->update($request->all());
 
-        return redirect()->route('manage-fuel-varients')->with('success', 'Car Fuel Variant updated successfully.');
+        return redirect()->route('car-fuel-varients.index')->with('success', 'Car Fuel Variant updated successfully.');
     }
 
-    public function destroy(Request $request)
+    public function destroy(CarFuelVariant $carFuelVarient)
     {
-        CarFuelVariant::find($request->id)->delete();
+        $carFuelVarient->delete();
 
-        return redirect()->route('manage-fuel-varients')->with('success', 'Car Fuel Variant deleted successfully.');
+        return redirect()->route('car-fuel-varients.index')->with('success', 'Car Fuel Variant deleted successfully.');
     }
 
     public function getRegistrationYears($carBrandId)

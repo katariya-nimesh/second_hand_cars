@@ -2,7 +2,7 @@
 
 @section('content')
     <h2>Car Owners</h2>
-    <a href="{{ route('create-owners') }}" class="button edit">Create New Car Owner</a>
+    <a href="{{ route('car-owners.create') }}" class="button edit">Create New Car Owner</a>
 
     <table>
         <thead>
@@ -18,10 +18,10 @@
                     <td>{{ $owner->id }}</td>
                     <td>{{ $owner->name }}</td>
                     <td>
-                        <a href="{{ route('edit-owners', $owner->id) }}" class="button edit">Edit</a>
-                        <form action="{{ route('delete-owners', [ 'id' => $owner->id]) }}" method="POST" style="display:inline">
+                        <a href="{{ route('car-owners.edit', $owner->id) }}" class="button edit">Edit</a>
+                        <form action="{{ route('car-owners.destroy', $owner->id) }}" method="POST" style="display:inline">
                             @csrf
-                            @method('POST')
+                            @method('DELETE')
                             <button type="submit" class="button delete">Delete</button>
                         </form>
                     </td>
