@@ -48,7 +48,6 @@ class UserWalletTransactionController extends Controller
     {
         try {
             $request->validate([
-                'car_details_id' => 'required|exists:car_details,id',
                 'date' => 'required|date',
                 'amount' => 'required|numeric',
                 'transaction_type' => 'required|string',
