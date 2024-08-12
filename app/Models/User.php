@@ -12,6 +12,15 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('user', function ($builder) {
+            $builder->where('user_type', 'user');
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,7 +36,9 @@ class User extends Authenticatable
         'user_type',
         'uid',
         'fcm_token',
-        'image'
+        'image',
+        'status',
+        'vendor_status'
     ];
 
     /**

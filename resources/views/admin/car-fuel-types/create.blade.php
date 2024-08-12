@@ -3,7 +3,7 @@
 @section('content')
     <h2>Create Car Fuel Type</h2>
 
-    <form action="{{ route('car-fuel-types.store') }}" method="POST">
+    <form action="{{ route('add-fuel-types') }}" method="POST">
         @csrf
         <div>
             <label for="fuel_type">Fuel Type:</label>
@@ -11,7 +11,11 @@
         </div>
         <div>
             <label for="transmission">Transmission:</label>
-            <input type="text" id="transmission" name="transmission" required>
+            {{-- <input type="text" id="transmission" name="transmission" required> --}}
+            <select id="transmission" name="transmission" required>
+                <option value="Manual" selected>Manual</option>
+                <option value="Automatic">Automatic</option>
+            </select>
         </div>
         <div>
             <label for="car_brand_id">Car Brand:</label>
@@ -33,35 +37,50 @@
             <select id="car_varient_id" name="car_varient_id" required>
                 <option value="">Select Car Variant</option>
             </select>
+            @error('car_varient_id')
+            <div>{{ $message }}</div>
+        @enderror
         </div>
         <button type="submit">Create</button>
     </form>
 
     <script>
-        document.getElementById('car_brand_id').addEventListener('change', function() {
-            var brandId = this.value;
-            fetch(`/api/get-registration-years?car_brand_id=${brandId}`)
-                .then(response => response.json())
-                .then(data => {
-                    var yearSelect = document.getElementById('car_registration_year_id');
-                    yearSelect.innerHTML = '<option value="">Select Registration Year</option>';
-                    data.forEach(function(year) {
-                        yearSelect.innerHTML += `<option value="${year.id}">${year.year}</option>`;
-                    });
-                });
-        });
+        var baseUrl = '{{ url('/') }}';
+        $('#car_brand_id').on('change', function() {
+    var brandId = $(this).val();
+    $.ajax({
+        url: baseUrl + `/api/get-registration-years`,
+        data: { car_brand_id: brandId },
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            var yearSelect = $('#car_registration_year_id');
+            yearSelect.html('<option value="">Select Registration Year</option>');
+            $.each(data, function(index, year) {
+                yearSelect.append(`<option value="${year.id}">${year.year}</option>`);
+            });
+            $('#car_varient_id').html('<option selected disabled value="">Select Car Variant</option>');
 
-        document.getElementById('car_registration_year_id').addEventListener('change', function() {
-            var yearId = this.value;
-            fetch(`/api/get-variants?car_registration_year_id=${yearId}`)
-                .then(response => response.json())
-                .then(data => {
-                    var variantSelect = document.getElementById('car_varient_id');
-                    variantSelect.innerHTML = '<option value="">Select Car Variant</option>';
-                    data.forEach(function(variant) {
-                        variantSelect.innerHTML += `<option value="${variant.id}">${variant.name}</option>`;
-                    });
-                });
-        });
+        }
+    });
+});
+
+$('#car_registration_year_id').on('change', function() {
+    var yearId = $(this).val();
+    $.ajax({
+        url: baseUrl + `/api/get-variants`,
+        data: { car_registration_year_id: yearId },
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            var variantSelect = $('#car_varient_id');
+            variantSelect.html('<option value="">Select Car Variant</option>');
+            $.each(data, function(index, variant) {
+                variantSelect.append(`<option value="${variant.id}">${variant.name}</option>`);
+            });
+        }
+    });
+});
+
     </script>
 @endsection

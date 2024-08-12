@@ -6,7 +6,7 @@ body {
 
 .sidebar {
     width: 240px;
-    background-color: #2C3E50;
+    background-color: #4476fb;
     color: #ecf0f1;
     height: 100vh;
     position: fixed;
@@ -16,47 +16,43 @@ body {
 .sidebar .logo {
     text-align: center;
     padding: 1px 0;
-    background-color: #2980B9;
+    background-color: #4476fb;
 }
 
-.sidebar nav {
+/* .sidebar nav {
     padding: 20px 0;
-}
+} */
 
 .sidebar nav ul {
     list-style: none;
-    padding: 0;
+    padding: 0px 14px;
 }
 
 .sidebar nav ul li {
-    padding: 10px 20px;
+    padding: 20px 25px;
     transition: background-color 0.3s ease;
 }
 
 .sidebar nav ul li a {
     text-decoration: none;
-    color: #ecf0f1;
+    color: #FFFFFF;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     transition: color 0.3s ease;
 }
 
 .sidebar nav ul li a:hover,
 .sidebar nav ul li.active a {
-    background-color: #34495E;
+    /* background-color: #34495E; */
     color: #ecf0f1;
-    background-color: #8d8e8f;
+    /* background-color: #8d8e8f; */
 }
 
 .sidebar nav ul li:hover,
 .sidebar nav ul li.active {
-    background-color: #8d8e8f;
-    color: #2C3E50;
-}
-
-.sidebar nav ul li.active a {
-    color: #2C3E50;
+    /* background-color: #8d8e8f; */
+    /* color: #2C3E50; */
 }
 
 .sidebar nav ul li a i {
@@ -65,11 +61,18 @@ body {
 
 .submenu-items {
     display: none;
-    padding-left: 20px;
+    padding: 0 !important;
+    font-size: small;
+}
+
+nav ul .expanded  {
+    border: 2px white solid;
+    border-radius: 24px;
 }
 
 .submenu-items.expanded {
     display: block;
+    border: none;
 }
 
 .submenu .submenu-toggle {
@@ -90,12 +93,11 @@ body {
 }
 
 header {
-    background-color: #ecf0f1;
-    padding: 20px 20px;
+    background-color: #FFFFFF;
+    padding: 3px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #ccc;
 }
 
 .search-container {
@@ -105,13 +107,20 @@ header {
 
 .search-container input {
     padding: 5px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+    margin-left: 15px;
+    border: none;
+    outline: none;
+    color: #C4C4C4;
+    font-size: x-large;
+}
+
+.search-container input::placeholder {
+    color: #c4c4c4;
+    /* font-weight: bold;  */
 }
 
 .search-container i {
-    color: #333;
+    color: #C4C4C4;
 }
 
 .user-icon {
@@ -126,7 +135,11 @@ header {
 
 .container {
     padding: 20px;
-    flex: 1;
+    background-color: #FBFBFB;
+    box-shadow: inset 5px 0px 15px rgba(0, 0, 0, 0.1), inset 0px 5px 15px rgba(0, 0, 0, 0.1); /* Left and top inset shadows */
+    padding: 20px;
+    background-color: #ffffff;
+
 }
 
 /* Table Styles */
@@ -135,19 +148,28 @@ table {
     border-collapse: collapse;
     margin-bottom: 20px;
     margin-top: 20px;
+    box-shadow:  5px 0px 15px rgba(0, 0, 0, 0.1),  0px 5px 15px rgba(0, 0, 0, 0.1); /* Left and top inset shadows */
 }
 
-table, th, td {
-    border: 1px solid #ddd;
+table thead{
+    box-shadow:  5px 0px 15px rgba(0, 0, 0, 0.1),  0px 5px 15px rgba(0, 0, 0, 0.1); /* Left and top inset shadows */
+}
+table, td {
+    border-right: 1px solid #ddd;
+}
+
+table, tr td:last-child {
+    border-right: none;
 }
 
 th, td {
     padding: 12px;
     text-align: left;
+    padding-left: 35px;
 }
 
 th {
-    background-color: #f4f4f4;
+    background-color: #FFFFFF;
 }
 
 /* Form Styles */
@@ -167,6 +189,7 @@ form label {
 }
 
 form input[type="text"],
+form input[type="email"],
 form input[type="number"],
 form select {
     width: 100%;
@@ -222,3 +245,41 @@ button.delete-btn:hover {
     border-radius: 4px;
     margin-bottom: 20px;
 }
+
+.sidebar .dashboard{
+    background: #ffffff;
+    padding: 1px;
+    color: #8d8d8d;
+    font-family: system-ui;
+    font-weight: 500;
+}
+
+.sidebar .dashboard p{
+    padding: 0px 55px;
+}
+
+.submenu-items li.active a::before {
+    content: "\f111"; /* Unicode for FontAwesome circle icon */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 8px; /* Adjust space between icon and text */
+    font-size: 0.5em;
+}
+
+.submenu .submenu-items li a {
+    color: #97B4FF;
+}
+
+.submenu ul li {
+    padding: 12px 0px 12px 10px !important;
+    transition: background-color 0.3s ease;
+}
+
+header .notification
+{
+    font-size: x-large;
+    color: #4476FB;
+    border-right: 2px solid #C4C4C4;
+    padding: 16px;
+    margin: 9px 15px;
+}   

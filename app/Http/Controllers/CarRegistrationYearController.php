@@ -24,13 +24,13 @@ class CarRegistrationYearController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'year' => 'required|integer',
+            'year' => 'required|integer|unique:car_registration_years,year,NULL,id,car_brand_id,' . $request->car_brand_id,
             'car_brand_id' => 'required|exists:car_brand,id',
         ]);
 
         CarRegistrationYear::create($request->all());
 
-        return redirect()->route('car-registration-years.index')->with('success', 'Car registration year created successfully.');
+        return redirect()->route('manage-registration-years')->with('success', 'Car registration year created successfully.');
     }
 
     public function edit($id)
@@ -40,22 +40,22 @@ class CarRegistrationYearController extends Controller
         return view('admin.car-registration-years.edit', compact('carRegistrationYear', 'carBrands'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $request->validate([
-            'year' => 'required|integer',
+            'year' => 'required|integer|unique:car_registration_years,year,' . $request->id . ',id,car_brand_id,' . $request->car_brand_id,
             'car_brand_id' => 'required|exists:car_brand,id',
         ]);
 
-        $carRegistrationYear = CarRegistrationYear::find($id);
+        $carRegistrationYear = CarRegistrationYear::find($request->id);
         $carRegistrationYear->update($request->all());
 
-        return redirect()->route('car-registration-years.index')->with('success', 'Car registration year updated successfully.');
+        return redirect()->route('manage-registration-years')->with('success', 'Car registration year updated successfully.');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        CarRegistrationYear::find($id)->delete();
-        return redirect()->route('car-registration-years.index')->with('success', 'Car registration year deleted successfully.');
+        CarRegistrationYear::find($request->id)->delete();
+        return redirect()->route('manage-registration-years')->with('success', 'Car registration year deleted successfully.');
     }
 }
