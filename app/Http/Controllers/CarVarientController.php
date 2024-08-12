@@ -24,41 +24,39 @@ class CarVarientController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:car_varient,name,NULL,id,car_registration_year_id,' . $request->car_registration_year_id,
+            'name' => 'required|string|max:255',
             'car_registration_year_id' => 'required|exists:car_registration_years,id',
         ]);
 
         CarVariant::create($request->all());
 
-        return redirect()->route('manage-varients')->with('success', 'Car Varient created successfully.');
+        return redirect()->route('car-varients.index')->with('success', 'Car Varient created successfully.');
     }
 
-    public function edit($id)
+    public function edit(CarVariant $carVarient)
     {
-        $carVarient = CarVariant::find($id);
         $carBrands = CarBrand::all();
         $carRegistrationYears = $carVarient->car_registration_year()->get();
         return view('admin.car-varients.edit', compact('carVarient', 'carBrands', 'carRegistrationYears'));
     }
 
-    public function update(Request $request)
+    public function update(Request $request, CarVariant $carVarient)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'car_registration_year_id' => 'required|exists:car_registration_years,id',
         ]);
 
-        $carVarient = CarVariant::find($request->id);
         $carVarient->update($request->all());
 
-        return redirect()->route('manage-varients')->with('success', 'Car Varient updated successfully.');
+        return redirect()->route('car-varients.index')->with('success', 'Car Varient updated successfully.');
     }
 
-    public function destroy(Request $request)
+    public function destroy(CarVariant $carVarient)
     {
-        CarVariant::find($request->id)->delete();
+        $carVarient->delete();
 
-        return redirect()->route('manage-varients')->with('success', 'Car Varient deleted successfully.');
+        return redirect()->route('car-varients.index')->with('success', 'Car Varient deleted successfully.');
     }
 
     public function getRegistrationYears(Request $request)

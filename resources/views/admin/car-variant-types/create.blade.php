@@ -3,7 +3,7 @@
 @section('content')
     <h2>Create Car Variant Type</h2>
 
-    <form action="{{ route('add-variant-types') }}" method="POST">
+    <form action="{{ route('car-variant-types.store') }}" method="POST">
         @csrf
         <div>
             <label for="name">Name:</label>
@@ -33,7 +33,7 @@
                 <option value="">Select Car Variant</option>
             </select>
         </div>
-
+       
         <div>
             <label for="car_fuel_type_id">Fuel Type:</label>
             <select id="car_fuel_type_id" name="car_fuel_type_id" required>
@@ -53,90 +53,66 @@
         <button type="submit">Create</button>
     </form>
     <script>
-$(document).ready(function() {
-    var baseUrl = '{{ url('/') }}';
+document.addEventListener('DOMContentLoaded', function() {
+    const brandSelect = document.getElementById('car_brand_id');
+    const yearSelect = document.getElementById('car_registration_year_id');
+    const variantSelect = document.getElementById('car_variant_id');
+    const fuelTypeSelect = document.getElementById('car_fuel_type_id');
+    const fuelVarientSelect = document.getElementById('car_fuel_varient_id');
 
-    const $brandSelect = $('#car_brand_id');
-    const $yearSelect = $('#car_registration_year_id');
-    const $variantSelect = $('#car_variant_id');
-    const $fuelTypeSelect = $('#car_fuel_type_id');
-    const $fuelVarientSelect = $('#car_fuel_varient_id');
-
-    $brandSelect.on('change', function() {
-        const brandId = $(this).val();
-        $.ajax({
-            url: baseUrl + `/api/registration-years/${brandId}`,
-            method: 'GET',
-            success: function(data) {
-                $yearSelect.html('<option value="">Select Registration Year</option>');
+    brandSelect.addEventListener('change', function() {
+        const brandId = this.value;
+        fetch(`/api/registration-years/${brandId}`)
+            .then(response => response.json())
+            .then(data => {
+                yearSelect.innerHTML = '<option value="">Select Registration Year</option>';
                 data.forEach(year => {
-                    $yearSelect.append(`<option value="${year.id}">${year.year}</option>`);
+                    yearSelect.innerHTML += `<option value="${year.id}">${year.year}</option>`;
                 });
-                $variantSelect.html('<option selected disabled value="">Select Car Variant</option>');
-                $fuelTypeSelect.html('<option selected disabled value="">Select Fuel Type</option>');
-                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Variant</option>');
-            },
-            error: function(error) {
-                console.error('Error fetching registration years:', error);
-            }
-        });
+            });
     });
 
-    $yearSelect.on('change', function() {
-        const yearId = $(this).val();
-        $.ajax({
-            url: baseUrl + `/api/variants/${yearId}`,
-            method: 'GET',
-            success: function(data) {
-                $variantSelect.html('<option value="">Select Car Variant</option>');
+    yearSelect.addEventListener('change', function() {
+        const yearId = this.value;
+        fetch(`/api/variants/${yearId}`)
+            .then(response => response.json())
+            .then(data => {
+                variantSelect.innerHTML = '<option value="">Select Car Variant</option>';
                 data.forEach(variant => {
-                    $variantSelect.append(`<option value="${variant.id}">${variant.name}</option>`);
+                    variantSelect.innerHTML += `<option value="${variant.id}">${variant.name}</option>`;
                 });
-                $fuelTypeSelect.html('<option selected disabled value="">Select Fuel Type</option>');
-                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Variant</option>');
-            },
-            error: function(error) {
-                console.error('Error fetching car variants:', error);
-            }
-        });
+            });
     });
 
-    $variantSelect.on('change', function() {
-        const variantId = $(this).val();
-        $.ajax({
-            url: baseUrl + `/api/fueltypes/${variantId}`,
-            method: 'GET',
-            success: function(data) {
-                $fuelTypeSelect.html('<option value="">Select Fuel Type</option>');
+    variantSelect.addEventListener('change', function() {
+        const variantId = this.value;
+        fetch(`/api/fueltypes/${variantId}`)
+            .then(response => response.json())
+            .then(data => {
+                fuelTypeSelect.innerHTML = '<option value="">Select Fuel Type</option>';
                 data.forEach(fuelType => {
-                    $fuelTypeSelect.append(`<option value="${fuelType.id}">${fuelType.fuel_type} - ${fuelType.transmission}</option>`);
+                    fuelTypeSelect.innerHTML += `<option value="${fuelType.id}">${fuelType.fuel_type} - ${fuelType.transmission}</option>`;
                 });
-                $fuelVarientSelect.html('<option selected disabled value="">Select Fuel Variant</option>');
-
-            },
-            error: function(error) {
-                console.error('Error fetching fuel types:', error);
-            }
-        });
+            })
+            .catch(error => {
+                console.error('Error fetching fuel types:', error); // Debugging line
+            });
     });
-
-    $fuelTypeSelect.on('change', function() {
-        const fueltypeId = $(this).val();
-        $.ajax({
-            url: baseUrl + `/api/fuelvarients/${fueltypeId}`,
-            method: 'GET',
-            success: function(data) {
-                $fuelVarientSelect.html('<option value="">Select Fuel Type Variant</option>');
+    
+    fuelTypeSelect.addEventListener('change', function() {
+        const fueltypeId = this.value;
+        fetch(`/api/fuelvarients/${fueltypeId}`)
+            .then(response => response.json())
+            .then(data => {
+                fuelVarientSelect.innerHTML = '<option value="">Select Fuel Type Varient</option>';
                 data.forEach(fuelType => {
-                    $fuelVarientSelect.append(`<option value="${fuelType.id}">${fuelType.name}</option>`);
+                    fuelVarientSelect.innerHTML += `<option value="${fuelType.id}">${fuelType.name}</option>`;
                 });
-            },
-            error: function(error) {
-                console.error('Error fetching fuel type variants:', error);
-            }
-        });
+            })
+            .catch(error => {
+                console.error('Error fetching fuel types:', error); // Debugging line
+            });
     });
 });
-
     </script>
 @endsection

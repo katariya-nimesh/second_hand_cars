@@ -23,7 +23,7 @@ class CarBrandController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:car_brand,name',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $carBrand = new CarBrand($request->all());
@@ -35,7 +35,7 @@ class CarBrandController extends Controller
 
         $carBrand->save();
 
-        return redirect()->route('dashboard')->with('success', 'Car brand created successfully.');
+        return redirect()->route('car-brands.index')->with('success', 'Car brand created successfully.');
     }
 
     public function edit($id)
@@ -44,14 +44,14 @@ class CarBrandController extends Controller
         return view('admin.car-brands.edit', compact('carBrand'));
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:car_brand,name,' . $request->id,
+            'name' => 'required|unique:car_brand,name,' . $id,
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $carBrand = CarBrand::find($request->id);
+        $carBrand = CarBrand::find($id);
         $carBrand->fill($request->all());
 
         if ($request->hasFile('image')) {
@@ -65,12 +65,12 @@ class CarBrandController extends Controller
 
         $carBrand->save();
 
-        return redirect()->route('dashboard')->with('success', 'Car brand updated successfully.');
+        return redirect()->route('car-brands.index')->with('success', 'Car brand updated successfully.');
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $carBrand = CarBrand::find($request->id);
+        $carBrand = CarBrand::find($id);
 
         if ($carBrand->image) {
             $oldImagePath = str_replace('/storage', 'public', $carBrand->image);
@@ -79,6 +79,6 @@ class CarBrandController extends Controller
 
         $carBrand->delete();
 
-        return redirect()->route('dashboard')->with('success', 'Car brand deleted successfully.');
+        return redirect()->route('car-brands.index')->with('success', 'Car brand deleted successfully.');
     }
 }
