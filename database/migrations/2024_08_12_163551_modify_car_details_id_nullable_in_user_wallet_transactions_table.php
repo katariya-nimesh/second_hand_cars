@@ -17,8 +17,8 @@ return new class extends Migration
             $table->dropForeign(['car_details_id']); // Drop the foreign key constraint
             $table->dropColumn('car_details_id'); // Drop the column
 
-            $table->unsignedBigInteger('car_details_id')->nullable(); // Add the column back (as nullable)
-            $table->foreign('car_details_id')->references('id')->on('car_details')->onDelete('cascade');
+            // $table->unsignedBigInteger('car_details_id')->nullable(); // Add the column back (as nullable)
+            // $table->foreign('car_details_id')->references('id')->on('car_details')->onDelete('cascade');
         });
     }
 
@@ -30,7 +30,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('user_wallet_transactions', function (Blueprint $table) {
-            // 
+            $table->unsignedBigInteger('car_details_id')->nullable(); // Add the column back (as nullable)
+            $table->foreign('car_details_id')->references('id')->on('car_details')->onDelete('cascade');
         });
     }
 };
