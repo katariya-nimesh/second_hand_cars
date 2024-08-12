@@ -28,6 +28,7 @@ class Wishlist extends Model
                 'car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year.car_brand',
                 'car_owner',
                 'car_kilometer',
-                'car_image',])->where('status', 'Active')->where('publish_status', 'Publish');
+                'car_image',
+                'user'])->where('status', 'Active')->where('publish_status', 'Publish');
     }
 }

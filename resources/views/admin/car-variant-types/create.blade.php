@@ -37,7 +37,7 @@
         <div>
             <label for="car_fuel_type_id">Fuel Type:</label>
             <select id="car_fuel_type_id" name="car_fuel_type_id" required>
-                <option value="">Select Fuel Types</option>
+                <option value="">Select Fuel Type</option>
             </select>
         </div>
 

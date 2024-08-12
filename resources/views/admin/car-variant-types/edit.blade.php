@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.forEach(fuelType => {
                     fuelTypeSelect.innerHTML += `<option value="${fuelType.id}">${fuelType.fuel_type} - ${fuelType.transmission}</option>`;
                 });
+
             })
             .catch(error => {
                 console.error('Error fetching fuel types:', error); // Debugging line

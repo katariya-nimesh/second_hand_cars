@@ -47,5 +47,4 @@ Route::get('api/fuelvarients/{fuelTypeId}', [CarFuelVarientController::class, 'g
 Route::get('car-setup/create', [CarSetupController::class, 'create'])->name('car-setup.create');
 Route::post('car-setup/store', [CarSetupController::class, 'store'])->name('car-setup.store');
 
-
 Route::get('vendor-profile/{id}', [UserController::class, 'vendorProfileWebPage']);
