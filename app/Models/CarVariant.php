@@ -15,16 +15,6 @@ class CarVariant extends Model
 
     protected $fillable = [
         'name',
-        'car_registration_year_id'
     ];
 
-    public function car_fuel_types()
-    {
-        return $this->hasMany(CarFuelType::class, 'car_varient_id');
-    }
-
-    public function car_registration_year()
-    {
-        return $this->belongsTo(CarRegistrationYear::class);
-    }
 }
