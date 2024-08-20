@@ -11,6 +11,12 @@ use App\Models\CarImage;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Wishlist;
+use App\Models\CarBrand;
+use App\Models\CarRegistrationYear;
+use App\Models\CarVariant;
+use App\Models\CarFuelType;
+use App\Models\CarFuelVariant;
+
 
 
 class CarDetail extends Model
@@ -27,7 +33,13 @@ class CarDetail extends Model
         'price',
         'status',
         'accident',
-        'publish_status'
+        'publish_status',
+        'car_brand_id',
+        'car_registration_year_id',
+        'car_varient_id',
+        'transmission',
+        'car_fuel_type_id',
+        'car_fuel_varient_id',
     ];
 
     public function getWishlistStatusAttribute()
@@ -50,6 +62,31 @@ class CarDetail extends Model
     }
 
     protected $appends = ['wishlist_status', 'wishlist_details'];
+
+    public function car_brand()
+    {
+        return $this->belongsTo(CarBrand::class);
+    }
+
+    public function car_registration_year()
+    {
+        return $this->belongsTo(CarRegistrationYear::class);
+    }
+
+    public function car_varient()
+    {
+        return $this->belongsTo(CarVariant::class);
+    }
+
+    public function car_fuel_type()
+    {
+        return $this->belongsTo(CarFuelType::class);
+    }
+
+    public function car_fuel_varient()
+    {
+        return $this->belongsTo(CarFuelVariant::class);
+    }
 
     public function car_varient_type()
     {

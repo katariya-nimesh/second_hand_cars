@@ -58,12 +58,18 @@ class User extends Authenticatable
 
     public function car_detail()
     {
-        return $this->hasMany(CarDetail::class, 'user_id')->with(['car_varient_type',
-                'car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year.car_brand',
+        return $this->hasMany(CarDetail::class, 'user_id')->with([
+                'car_varient_type',
+                'car_brand',
+                'car_registration_year',
+                'car_varient',
+                'car_fuel_type',
+                'car_fuel_varient',
                 'car_owner',
                 'car_kilometer',
                 'car_image',
-                'user'])->where('status', 'Active')->where('publish_status', 'Publish');
+                'user'
+            ])->where('status', 'Active')->where('publish_status', 'Publish');
     }
 
     public function user_qr()

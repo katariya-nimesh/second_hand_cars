@@ -31,13 +31,13 @@ class CarController extends Controller
         }
     }
 
-    public function getRegistrationYearsByBrandId($brandId)
+    public function getRegistrationYearsByBrandId()
     {
         try {
-            $years = CarRegistrationYear::where('car_brand_id', $brandId)->orderBy('year', 'desc')->get();
+            $years = CarRegistrationYear::orderBy('year', 'desc')->get();
 
             if ($years->isEmpty()) {
-                return ResponseHelper::error('No registration years found for the given brand ID', 404);
+                return ResponseHelper::error('No registration years found', 404);
             }
 
             return ResponseHelper::success($years, 'Registration years retrieved successfully');
@@ -46,13 +46,13 @@ class CarController extends Controller
         }
     }
 
-    public function getCarVarientByRegistrationYearId($registrationYearId)
+    public function getCarVarientByRegistrationYearId()
     {
         try {
-            $carVarient = CarVariant::where('car_registration_year_id', $registrationYearId)->get();
+            $carVarient = CarVariant::all();
 
             if ($carVarient->isEmpty()) {
-                return ResponseHelper::error('No car varient on this given car registration year id', 404);
+                return ResponseHelper::error('No car varient', 404);
             }
 
             return ResponseHelper::success($carVarient, 'Car Varient retrieved successfully');
@@ -61,13 +61,13 @@ class CarController extends Controller
         }
     }
 
-    public function getCarFuelTypeByVarientId($varientId)
+    public function getCarFuelTypeByVarientId()
     {
         try {
-            $carFuelType = CarFuelType::where('car_varient_id', $varientId)->get();
+            $carFuelType = CarFuelType::all();
 
             if ($carFuelType->isEmpty()) {
-                return ResponseHelper::error('No car fuel type on this given car varient id', 404);
+                return ResponseHelper::error('No car fuel type', 404);
             }
 
             return ResponseHelper::success($carFuelType, 'Car Fuel Type retrieved successfully');
@@ -77,13 +77,13 @@ class CarController extends Controller
     }
 
 
-    public function getCarFuelVarientByCarFuelTypeId($carFuelTypeId)
+    public function getCarFuelVarientByCarFuelTypeId()
     {
         try {
-            $carfuelVarient = CarFuelVariant::where('car_fuel_type_id', $carFuelTypeId)->get();
+            $carfuelVarient = CarFuelVariant::all();
 
             if ($carfuelVarient->isEmpty()) {
-                return ResponseHelper::error('No car fuel varient on this given car fuel type id', 404);
+                return ResponseHelper::error('No car fuel varient', 404);
             }
 
             return ResponseHelper::success($carfuelVarient, 'Car Fuel Varient retrieved successfully');
@@ -92,13 +92,13 @@ class CarController extends Controller
         }
     }
 
-    public function getCarVarientTypeByCarFuelVarientId($carFuelVarientId)
+    public function getCarVarientTypeByCarFuelVarientId()
     {
         try {
-            $carVarientType = CarVariantType::where('car_fuel_varient_id', $carFuelVarientId)->get();
+            $carVarientType = CarVariantType::all();
 
             if ($carVarientType->isEmpty()) {
-                return ResponseHelper::error('No car varient type on this given car fuel varient id', 404);
+                return ResponseHelper::error('No car varient type', 404);
             }
 
             return ResponseHelper::success($carVarientType, 'Car Varient Type retrieved successfully');
@@ -147,7 +147,13 @@ class CarController extends Controller
                 'price' => 'required',
                 'accident' => 'required',
                 'status' => 'required',
-                'publish_status' => 'required'
+                'publish_status' => 'required',
+                'car_brand_id'=> 'required' ,
+                'car_registration_year_id'=> 'required' ,
+                'car_varient_id'=> 'required' ,
+                'transmission'=> 'required' ,
+                'car_fuel_type_id'=> 'required' ,
+                'car_fuel_varient_id'=> 'required' ,
             ];
 
             // Validate the request
@@ -176,6 +182,12 @@ class CarController extends Controller
                     'accident' => $request->accident,
                     'status' => $request->status,
                     'publish_status' => $request->publish_status,
+                    'car_brand_id'=> $request->car_brand_id,
+                    'car_registration_year_id'=> $request->car_registration_year_id,
+                    'car_varient_id'=> $request->car_varient_id,
+                    'transmission'=> $request->transmission,
+                    'car_fuel_type_id'=> $request->car_fuel_type_id,
+                    'car_fuel_varient_id'=> $request->car_fuel_varient_id,
                 ]);
 
                 // Delete old images if new images are provided
@@ -208,6 +220,12 @@ class CarController extends Controller
                     'accident' => $request->accident,
                     'status' => $request->status,
                     'publish_status' => $request->publish_status,
+                    'car_brand_id'=> $request->car_brand_id,
+                    'car_registration_year_id'=> $request->car_registration_year_id,
+                    'car_varient_id'=> $request->car_varient_id,
+                    'transmission'=> $request->transmission,
+                    'car_fuel_type_id'=> $request->car_fuel_type_id,
+                    'car_fuel_varient_id'=> $request->car_fuel_varient_id,
                 ]);
             }
 
@@ -250,10 +268,15 @@ class CarController extends Controller
 
             $query = CarDetail::with([
                 'car_varient_type',
-                'car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year.car_brand',
+                'car_brand',
+                'car_registration_year',
+                'car_varient',
+                'car_fuel_type',
+                'car_fuel_varient',
                 'car_owner',
                 'car_kilometer',
-                'car_image'
+                'car_image',
+                'user'
             ])->where('user_id', $user->id);
 
             if ($status == "Deactive" || $status == "Active") {
@@ -311,7 +334,11 @@ class CarController extends Controller
         try {
             $query = CarDetail::with([
                 'car_varient_type',
-                'car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year.car_brand',
+                'car_brand',
+                'car_registration_year',
+                'car_varient',
+                'car_fuel_type',
+                'car_fuel_varient',
                 'car_owner',
                 'car_kilometer',
                 'car_image',
@@ -322,30 +349,22 @@ class CarController extends Controller
 
             // Company(brand) name
             if ($request->has('car_brand_id') && !empty($request->car_brand_id)) {
-                $query->whereHas('car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year.car_brand', function($q) use ($request) {
-                    $q->where('id', $request->car_brand_id);
-                });
+                $query->where('car_brand_id', $request->car_brand_id);
             }
 
             // Registration year
             if ($request->has('car_registration_year_id') && !empty($request->car_registration_year_id)) {
-                $query->whereHas('car_varient_type.car_fuel_varient.car_fuel_type.car_varient.car_registration_year', function($q) use ($request) {
-                    $q->where('id', $request->car_registration_year_id);
-                });
+                $query->where('car_registration_year_id', $request->car_registration_year_id);
             }
 
             // Model
             if ($request->has('car_varient_id') && !empty($request->car_varient_id)) {
-                $query->whereHas('car_varient_type.car_fuel_varient.car_fuel_type.car_varient', function($q) use ($request) {
-                    $q->where('id', $request->car_varient_id);
-                });
+                $query->where('car_varient_id', $request->car_varient_id);
             }
 
             // Varient
             if ($request->has('car_fuel_varient_id') && !empty($request->car_fuel_varient_id)) {
-                $query->whereHas('car_varient_type.car_fuel_varient', function($q) use ($request) {
-                    $q->where('id', $request->car_fuel_varient_id);
-                });
+                $query->where('car_fuel_varient_id', $request->car_fuel_varient_id);
             }
 
             // Type
@@ -385,10 +404,13 @@ class CarController extends Controller
             }
 
             // Fuel type
-            if ($request->has('fuel_type') && !empty($request->fuel_type)) {
-                $query->whereHas('car_varient_type.car_fuel_varient.car_fuel_type', function($q) use ($request) {
-                    $q->where('fuel_type', $request->fuel_type);
-                });
+            if ($request->has('car_fuel_type_id') && !empty($request->car_fuel_type_id)) {
+                $query->where('car_fuel_type_id', $request->car_fuel_type_id);
+            }
+
+            // transmission
+            if ($request->has('transmission') && !empty($request->transmission)) {
+                $query->where('transmission', $request->transmission);
             }
 
 

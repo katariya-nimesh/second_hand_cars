@@ -14,16 +14,6 @@ class CarRegistrationYear extends Model
 
     protected $fillable = [
         'year',
-        'car_brand_id'
     ];
 
-    public function car_brand()
-    {
-        return $this->belongsTo(CarBrand::class);
-    }
-
-    public function car_varients()
-    {
-        return $this->hasMany(CarVariant::class, 'car_registration_year_id');
-    }
 }

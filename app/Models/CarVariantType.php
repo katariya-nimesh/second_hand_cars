@@ -16,16 +16,7 @@ class CarVariantType extends Model
 
     protected $fillable = [
         'name',
-        'car_fuel_varient_id'
     ];
 
-    public function car_images()
-    {
-        return $this->hasMany(CarImage::class, 'car_varient_type_id');
-    }
 
-    public function car_fuel_varient()
-    {
-        return $this->belongsTo(CarFuelVariant::class);
-    }
 }
