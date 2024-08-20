@@ -32,9 +32,9 @@ return new class extends Migration
             // Add foreign key constraints (if applicable)
             $table->foreign('car_brand_id')->references('id')->on('car_brand')->onDelete('cascade');
             $table->foreign('car_registration_year_id')->references('id')->on('car_registration_years')->onDelete('cascade');
-            $table->foreign('car_varient_id')->references('id')->on('car_varients')->onDelete('cascade');
-            $table->foreign('car_fuel_type_id')->references('id')->on('car_fuel_types')->onDelete('cascade');
-            $table->foreign('car_fuel_varient_id')->references('id')->on('car_fuel_varients')->onDelete('cascade');
+            $table->foreign('car_varient_id')->references('id')->on('car_varient')->onDelete('cascade');
+            $table->foreign('car_fuel_type_id')->references('id')->on('car_fuel_type')->onDelete('cascade');
+            $table->foreign('car_fuel_varient_id')->references('id')->on('car_fuel_varient')->onDelete('cascade');
 
             // $table->dropForeign(['user_id']);
 
