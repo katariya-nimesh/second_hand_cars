@@ -36,7 +36,7 @@ return new class extends Migration
             $table->foreign('car_fuel_type_id')->references('id')->on('car_fuel_types')->onDelete('cascade');
             $table->foreign('car_fuel_varient_id')->references('id')->on('car_fuel_varients')->onDelete('cascade');
 
-            $table->dropForeign(['user_id']);
+            // $table->dropForeign(['user_id']);
 
             // Drop the user_id column
             $table->dropColumn('user_id');
