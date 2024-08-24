@@ -192,7 +192,7 @@ class CarController extends Controller
 
                 // Delete old images if new images are provided
                 if ($request->hasFile('images')) {
-                    $oldImages = CarImage::where('car_varient_type_id', $carDetails->car_varient_type_id)->where('car_details_id', $carDetails->id)->where('type', 'image')->get();
+                    $oldImages = CarImage::where('car_details_id', $carDetails->id)->where('type', 'image')->get();
                     foreach ($oldImages as $oldImage) {
                         $oldImagePath = str_replace('/storage', 'public', $oldImage->image);
                         Storage::delete($oldImagePath);
@@ -202,7 +202,7 @@ class CarController extends Controller
 
                 // Delete old videos if new videos are provided
                 if ($request->hasFile('videos')) {
-                    $oldVideos = CarImage::where('car_varient_type_id', $carDetails->car_varient_type_id)->where('car_details_id', $carDetails->id)->where('type', 'video')->get();
+                    $oldVideos = CarImage::where('car_details_id', $carDetails->id)->where('type', 'video')->get();
                     foreach ($oldVideos as $oldVideo) {
                         $oldVideoPath = str_replace('/storage', 'public', $oldVideo->image);
                         Storage::delete($oldVideoPath);
@@ -234,7 +234,6 @@ class CarController extends Controller
                 foreach ($request->file('images') as $image) {
                     $path = $image->store('public/images');
                     CarImage::create([
-                        'car_varient_type_id' => $request->car_varient_type_id,
                         'image' => Storage::url($path),
                         'type' => 'image',
                         'car_details_id' => $carDetails->id,
@@ -246,7 +245,6 @@ class CarController extends Controller
                 foreach ($request->file('videos') as $video) {
                     $path = $video->store('public/videos');
                     CarImage::create([
-                        'car_varient_type_id' => $request->car_varient_type_id,
                         'image' => Storage::url($path),
                         'type' => 'video',
                         'car_details_id' => $carDetails->id,

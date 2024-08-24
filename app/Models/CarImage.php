@@ -14,15 +14,9 @@ class CarImage extends Model
 
     protected $fillable = [
         'image',
-        'car_varient_type_id',
         'type',
         'car_details_id'
     ];
-
-    public function car_varient_type()
-    {
-        return $this->belongsTo(CarVariantType::class);
-    }
 
     public function getImageAttribute($value)
     {
