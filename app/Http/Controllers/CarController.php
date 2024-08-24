@@ -46,10 +46,10 @@ class CarController extends Controller
         }
     }
 
-    public function getCarVarientByRegistrationYearId()
+    public function getCarVarientByBrandId($id)
     {
         try {
-            $carVarient = CarVariant::all();
+            $carVarient = CarVariant::with('car_brand')->where('car_brand_id', $id)->get();
 
             if ($carVarient->isEmpty()) {
                 return ResponseHelper::error('No car varient', 404);
