@@ -53,10 +53,46 @@ class UserController extends Controller
                 'phoneno' => 'sometimes|nullable|string|max:20',
                 'business_name' => 'sometimes|required|string|max:255',
                 'location' => 'sometimes|required|string|max:255',
+                'year_of_establishment' => 'sometimes|nullable|integer',
+                'gst_number' => 'sometimes|nullable|string|max:15',
+                'address' => 'sometimes|nullable|string|max:255',
+                'city' => 'sometimes|nullable|string|max:100',
+                'state' => 'sometimes|nullable|string|max:100',
+                'pincode' => 'sometimes|nullable|string|max:10',
+                'business_email' => 'sometimes|nullable|email|max:255',
+                'type_of_business' => 'sometimes|nullable|string|max:100',
+                'name_of_partner_1' => 'sometimes|nullable|string|max:255',
+                'name_of_partner_2' => 'sometimes|nullable|string|max:255',
+                'phoneno_2' => 'sometimes|nullable|string|max:20',
             ]);
 
             // Update the user's profile details with only the validated fields
             $user->update($validatedData);
+
+            // Handle file uploads
+            $fileFields = [
+                'vendor_live_photo',
+                'business_live_photo',
+                'gst_certificate',
+                'partnersheep_deed',
+                'adharcard_one',
+                'adharcard_two',
+                'cancel_cheque'
+            ];
+
+            foreach ($fileFields as $field) {
+                if ($request->hasFile($field)) {
+                    // Delete the old file if it exists
+                    if ($user->$field) {
+                        $oldFilePath = str_replace('/storage', 'public', $user->$field);
+                        Storage::delete($oldFilePath);
+                    }
+
+                    // Store the new file
+                    $path = $request->file($field)->store("public/{$field}");
+                    $user->$field = Storage::url($path);
+                }
+            }
 
             // Handle profile image upload
             if ($request->hasFile('image')) {
@@ -69,15 +105,19 @@ class UserController extends Controller
                 // Store the new image
                 $path = $request->file('image')->store('public/profile_images');
                 $user->image = Storage::url($path);
-                $user->save();
             }
+
+            // Save user after all updates
+            $user->save();
+
             // Redirect or return response
-            return ResponseHelper::success($user, 'Car details updated successfully!');
+            return ResponseHelper::success($user, 'Profile updated successfully!');
 
         } catch (\Exception $e) {
             return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }
     }
+
 
     public function addTransactionDetails(Request $request){
         //
@@ -169,7 +209,7 @@ class UserController extends Controller
             }
 
             $path = $request->file('qr_image')->store('public/qr_images');
-            
+
             $userQR = UserQR::create([
                 'user_id' => $request->user_id,
                 'qr_image' => Storage::url($path)
