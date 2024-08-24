@@ -29,7 +29,25 @@ class User extends Authenticatable
         'fcm_token',
         'image',
         'status',
-        'vendor_status'
+        'vendor_status',
+        'year_of_establishment',
+        'gst_number',
+        'address',
+        'city',
+        'state',
+        'pincode',
+        'business_email',
+        'type_of_business',
+        'name_of_partner_1',
+        'name_of_partner_2',
+        'phoneno_2',
+        'vendor_live_photo',
+        'business_live_photo',
+        'gst_certificate',
+        'partnersheep_deed',
+        'adharcard_one',
+        'adharcard_two',
+        'cancel_cheque'
     ];
 
     /**
@@ -52,6 +70,41 @@ class User extends Authenticatable
     ];
 
     public function getImageAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
+
+    public function getVendorLivePhotoAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
+
+    public function getBusinessLivePhotoAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
+
+    public function getGstCertificateAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
+
+    public function getPartnersheepDeedAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
+
+    public function getAdharcardOneAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
+
+    public function getAdharcardTwoAttribute($value)
+    {
+        return $value ? asset($value) : null;
+    }
+
+    public function getCancelChequeAttribute($value)
     {
         return $value ? asset($value) : null;
     }
@@ -100,7 +153,25 @@ class User extends Authenticatable
             'user_type',
             'uid',
             'fcm_token',
-            'image'
+            'image',
+            'year_of_establishment',
+            'gst_number',
+            'address',
+            'city',
+            'state',
+            'pincode',
+            'business_email',
+            'type_of_business',
+            'name_of_partner_1',
+            'name_of_partner_2',
+            'phoneno_2',
+            'vendor_live_photo',
+            'business_live_photo',
+            'gst_certificate',
+            'partnersheep_deed',
+            'adharcard_one',
+            'adharcard_two',
+            'cancel_cheque'
         ];
 
         // Retrieve the user
