@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Car APIs
     Route::get('get-car-brands', [CarController::class, 'getCarBrands']);
     Route::get('car-registration-years', [CarController::class, 'getRegistrationYearsByBrandId']);
-    Route::get('car-varient', [CarController::class, 'getCarVarientByRegistrationYearId']);
+    Route::get('car-varient/{id}', [CarController::class, 'getCarVarientByBrandId']);
     Route::get('car-fuel-type', [CarController::class, 'getCarFuelTypeByVarientId']);
     Route::get('car-fuel-varient', [CarController::class, 'getCarFuelVarientByCarFuelTypeId']);
     Route::get('car-varient-type', [CarController::class, 'getCarVarientTypeByCarFuelVarientId']);
