@@ -47,7 +47,8 @@ class User extends Authenticatable
         'partnersheep_deed',
         'adharcard_one',
         'adharcard_two',
-        'cancel_cheque'
+        'cancel_cheque',
+        'plan_id'
     ];
 
     /**
@@ -190,5 +191,27 @@ class User extends Authenticatable
         }
 
         return true;
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
+    public function getPlanActiveAttribute()
+    {
+        if($this->plan_id){
+            $planDetails = Plan::find($this->plan_id);
+            $activeCars = CarDetail::where([
+                'user_id' => $this->id,
+                'status' => 'Active',
+                'publish_status' => 'Publish'
+            ])->count();
+
+            if($planDetails->total_cars > $activeCars){
+                return true;
+            }
+        }
+        return false;
     }
 }

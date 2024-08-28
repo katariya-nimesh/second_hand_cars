@@ -173,6 +173,16 @@ class CarController extends Controller
                     return ResponseHelper::error('Car details not found', 404);
                 }
 
+                if(!($carDetails->status == "Active" && $carDetails->publish_status == "Publish")){
+                    if($request->status == "Active" && $request->publish_status == "Publish"){
+                        // check the user can update the status or not
+                        if(!$user->plan_active){
+                            return ResponseHelper::success(null, 'Car can not be updated! Please upgrade your plan');
+                        }
+                    }
+                }
+
+
                 // Update car details
                 $carDetails->update([
                     'car_varient_type_id' => $request->car_varient_type_id,
@@ -211,6 +221,13 @@ class CarController extends Controller
                 }
             } else {
                 // Add new car details
+                if($request->status == "Active" && $request->publish_status == "Publish"){
+                    // check the user can update the status or not
+                    if(!$user->plan_active){
+                        return ResponseHelper::success(null, 'Car can not be added! Please upgrade your plan');
+                    }
+                }
+
                 $carDetails = CarDetail::create([
                     'user_id' => $user->id,
                     'car_varient_type_id' => $request->car_varient_type_id,
@@ -310,6 +327,13 @@ class CarController extends Controller
             $carDetail = CarDetail::where('user_id', $user->id)->where('id', $request->car_details_id)->first();
 
             if ($carDetail) {
+                if($request->status == "Active" && $request->publish_status == "Publish"){
+                    // check the user can update the status or not
+                    if(!$user->plan_active){
+                        return ResponseHelper::success(null, 'Car status can not updated! Please upgrade your plan');
+                    }
+                }
+
                 // Update the car details with the new data
                 $carDetail->update([
                     'car_details_id' => $request->car_details_id,
