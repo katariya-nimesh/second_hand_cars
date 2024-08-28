@@ -88,4 +88,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Get all plans
     Route::get('/get-plans', [PlanPackageController::class, 'index']);
 
+    // user perchase plan
+    Route::post('/purchase-plan', [PlanPackageController::class, 'purchasePlan']);
+
 });

@@ -197,4 +197,21 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Plan::class);
     }
+
+    public function getPlanActiveAttribute()
+    {
+        if($this->plan_id){
+            $planDetails = Plan::find($this->plan_id);
+            $activeCars = CarDetail::where([
+                'user_id' => $this->id,
+                'status' => 'Active',
+                'publish_status' => 'Publish'
+            ])->count();
+
+            if($planDetails->total_cars > $activeCars){
+                return true;
+            }
+        }
+        return false;
+    }
 }

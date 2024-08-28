@@ -20,4 +20,42 @@ class PlanPackageController extends Controller
             return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }
     }
+
+    public function purchasePlan(Request $request)
+    {
+        try {
+            $request->validate([
+                'plan_id' => 'required|exists:plans,id',
+            ]);
+
+            // check the new plan or upgrade the plan
+            $user = Auth::user();
+
+            if($user->plan_id){
+                // check the choosen plan is greater than the exists plan
+                $plan = Plan::find($request->plan_id);
+
+                $currentPlanTotalCars = $user->plan->total_cars;
+                $choosenPlanTotalCars = $plan->total_cars;
+
+                if($currentPlanTotalCars < $choosenPlanTotalCars){
+                    $user->update([
+                        'plan_id' => $request->plan_id
+                    ]);
+
+                    return ResponseHelper::success(null, 'Plans upgrade successfully');
+                }else{
+                    return ResponseHelper::success(null, 'Plans not be upgraded');
+                }
+            }else{
+                $user->update([
+                    'plan_id' => $request->plan_id
+                ]);
+            }
+
+            return ResponseHelper::success(null, 'Plans added successfully');
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
+    }
 }
