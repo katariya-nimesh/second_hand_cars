@@ -7,6 +7,7 @@ use App\Helpers\ResponseHelper;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Plan;
+use Carbon\Carbon;
 
 class PlanPackageController extends Controller
 {
@@ -40,7 +41,9 @@ class PlanPackageController extends Controller
 
                 if($currentPlanTotalCars < $choosenPlanTotalCars){
                     $user->update([
-                        'plan_id' => $request->plan_id
+                        'plan_id' => $request->plan_id,
+                        // 'plan_start_date' => Carbon::now(),
+                        // 'plan_end_date' => Carbon::now()->addMonth()
                     ]);
 
                     return ResponseHelper::success(null, 'Plans upgrade successfully');
@@ -49,7 +52,9 @@ class PlanPackageController extends Controller
                 }
             }else{
                 $user->update([
-                    'plan_id' => $request->plan_id
+                    'plan_id' => $request->plan_id,
+                    'plan_start_date' => Carbon::now(),
+                    'plan_end_date' => Carbon::now()->addMonth()
                 ]);
             }
 
