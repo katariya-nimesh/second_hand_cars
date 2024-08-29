@@ -48,7 +48,9 @@ class User extends Authenticatable
         'adharcard_one',
         'adharcard_two',
         'cancel_cheque',
-        'plan_id'
+        'plan_id',
+        'plan_start_date',
+        'plan_end_date'
     ];
 
     /**
@@ -163,16 +165,18 @@ class User extends Authenticatable
             'pincode',
             'business_email',
             'type_of_business',
-            'name_of_partner_1',
-            'name_of_partner_2',
-            'phoneno_2',
             'vendor_live_photo',
             'business_live_photo',
             'gst_certificate',
-            'partnersheep_deed',
             'adharcard_one',
             'adharcard_two',
             'cancel_cheque'
+        ];
+
+        $partnershipFields = [
+            'name_of_partner_1',
+            'phoneno_2',
+            'partnersheep_deed'
         ];
 
         // Retrieve the user
@@ -187,6 +191,14 @@ class User extends Authenticatable
         foreach ($requiredFields as $field) {
             if (is_null($user->$field) || empty($user->$field)) {
                 return false;
+            }
+        }
+
+        if($this->type_of_business == "Partnership"){
+            foreach ($partnershipFields as $field) {
+                if (is_null($user->$field) || empty($user->$field)) {
+                    return false;
+                }
             }
         }
 

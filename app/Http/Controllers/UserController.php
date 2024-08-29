@@ -17,7 +17,7 @@ class UserController extends Controller
 {
     public function getUser()
     {
-        return ResponseHelper::success(Auth::user());
+        return ResponseHelper::success(Auth::user()->load('plan'));
     }
 
     public function getUserWalletBalance()
