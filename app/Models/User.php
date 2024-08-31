@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -142,7 +143,7 @@ class User extends Authenticatable
         return null;
     }
 
-    protected $appends = ['qr_image_path', 'profile_updated'];
+    protected $appends = ['qr_image_path', 'profile_updated', 'plan_details'];
 
     public function getProfileUpdatedAttribute()
     {
@@ -225,5 +226,27 @@ class User extends Authenticatable
             }
         }
         return false;
+    }
+
+    public function getPlanDetailsAttribute()
+    {
+        if($this->plan_id){
+            $planDetails = Plan::find($this->plan_id);
+            $activeCars = CarDetail::where([
+                'user_id' => $this->id,
+                'status' => 'Active',
+                'publish_status' => 'Publish'
+            ])->count();
+
+            $isExpried = $this->plan_end_date && Carbon::parse($this->plan_end_date)->isPast();
+
+            return [
+                'active_car' => $activeCars,
+                'total_car' => $planDetails->total_cars,
+                'remaining_car' => $planDetails->total_cars - $activeCars,
+                'is_expried' => $isExpried
+            ];
+        }
+        return null;
     }
 }
