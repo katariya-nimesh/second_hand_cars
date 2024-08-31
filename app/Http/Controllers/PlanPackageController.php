@@ -63,4 +63,28 @@ class PlanPackageController extends Controller
             return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }
     }
+
+    public function checkCoupon($code)
+    {
+        try {
+            if($code == "FIRSTOFF"){
+                return ResponseHelper::success([
+                    'coupon_code' => 'FIRSTOFF',
+                    'discount' => 500
+                ], 'Coupon match! discount applied');
+            }
+
+            if($code == "GET50"){
+                return ResponseHelper::success([
+                    'coupon_code' => 'GET50',
+                    'discount' => 50
+                ], 'Coupon match! discount applied');
+            }
+
+            return ResponseHelper::success(null, 'Coupon does not match');
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
+
+    }
 }

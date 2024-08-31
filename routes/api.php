@@ -91,4 +91,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // user perchase plan
     Route::post('/purchase-plan', [PlanPackageController::class, 'purchasePlan']);
 
+    // check coupon
+    Route::get('/check-coupon/{code}', [PlanPackageController::class, 'checkCoupon']);
+
 });
