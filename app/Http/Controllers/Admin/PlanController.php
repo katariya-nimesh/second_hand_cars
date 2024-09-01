@@ -22,16 +22,13 @@ class PlanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'      => 'required|unique:plans,name',
-            'totalcars' => 'required|integer|min:0',
-            'price'     => 'required|integer|min:0',
+            'name'          => 'required|string|max:255|unique:plans,name',
+            'total_cars'    => 'required|integer|min:0',
+            'price'         => 'required|integer|min:0',
+            'description'   => 'nullable|string|max:255',
         ]);
 
-        Plan::create([
-            'name'      => $request->name,
-            'total_cars'     => $request->totalcars,
-            'price'     => $request->price,
-        ]);
+        Plan::create($request->all());
 
         return redirect()->route('manage-plans')->with('success', 'Plan created successfully.');
     }
@@ -51,9 +48,10 @@ class PlanController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'name'  => 'required|unique:plans,name,' . $request->id,
-            'totalcars' => 'required|integer|min:0',
-            'price'     => 'required|integer|min:0',
+            'name'          => 'required|string|max:255|unique:plans,name,' . $request->id,
+            'total_cars'    => 'required|integer|min:0',
+            'price'         => 'required|integer|min:0',
+            'description'   => 'nullable|string|max:255',
         ]);
 
         $plan = Plan::find($request->id);
@@ -66,8 +64,7 @@ class PlanController extends Controller
 
     public function destroy($id)
     {
-        $plan = Plan::find($id);
-        $plan->delete();
+        $plan = Plan::find($id)->delete();
 
         return redirect()->route('manage-plans')->with('success', 'Plan deleted successfully.');
     }

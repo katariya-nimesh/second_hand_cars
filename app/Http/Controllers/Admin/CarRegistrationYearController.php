@@ -1,31 +1,28 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\CarRegistrationYear;
-use App\Models\CarBrand;
 use Illuminate\Http\Request;
 
 class CarRegistrationYearController extends Controller
 {
     public function index()
     {
-        // Update the relationship name here
-        $carRegistrationYears = CarRegistrationYear::with('car_brand')->get();
+        $carRegistrationYears = CarRegistrationYear::all();
         return view('admin.car-registration-years.index', compact('carRegistrationYears'));
     }
 
     public function create()
     {
-        $carBrands = CarBrand::all();
-        return view('admin.car-registration-years.create', compact('carBrands'));
+        return view('admin.car-registration-years.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'year' => 'required|integer|unique:car_registration_years,year,NULL,id,car_brand_id,' . $request->car_brand_id,
-            'car_brand_id' => 'required|exists:car_brand,id',
+            'year' => 'required|integer|digits:4|unique:car_registration_years,year',
         ]);
 
         CarRegistrationYear::create($request->all());
@@ -36,15 +33,13 @@ class CarRegistrationYearController extends Controller
     public function edit($id)
     {
         $carRegistrationYear = CarRegistrationYear::find($id);
-        $carBrands = CarBrand::all();
-        return view('admin.car-registration-years.edit', compact('carRegistrationYear', 'carBrands'));
+        return view('admin.car-registration-years.edit', compact('carRegistrationYear'));
     }
 
     public function update(Request $request)
     {
         $request->validate([
-            'year' => 'required|integer|unique:car_registration_years,year,' . $request->id . ',id,car_brand_id,' . $request->car_brand_id,
-            'car_brand_id' => 'required|exists:car_brand,id',
+            'year' => 'required|integer|digits:4|unique:car_registration_years,year,' . $request->id,
         ]);
 
         $carRegistrationYear = CarRegistrationYear::find($request->id);
@@ -53,9 +48,9 @@ class CarRegistrationYearController extends Controller
         return redirect()->route('manage-registration-years')->with('success', 'Car registration year updated successfully.');
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        CarRegistrationYear::find($request->id)->delete();
+        CarRegistrationYear::find($id)->delete();
         return redirect()->route('manage-registration-years')->with('success', 'Car registration year deleted successfully.');
     }
 }

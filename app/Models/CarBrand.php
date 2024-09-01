@@ -22,9 +22,4 @@ class CarBrand extends Model
     {
         return $value ? asset($value) : null;
     }
-
-    public function getImageUrlAttribute()
-    {
-        return $this->image ? Storage::url($this->image) : null;
-    }
 }
