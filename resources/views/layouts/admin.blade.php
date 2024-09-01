@@ -14,70 +14,56 @@
 
 <body>
     <div class="sidebar">
-        <div class="logo">
-            <h1>LOGO</h1>
+        <div class="logo" style="padding: 0px;margin: 0px 0px -4px 0px;;">
+            <img style="width: -webkit-fill-available" src="{{ asset('logo/logo.jpg') }}" alt="" height="83" width="240">
         </div>
         <div class="dashboard">
             <p><i class="fas fa-home"></i> Dashboard</p>
         </div>
         <nav>
             <ul>
-                <li class="submenu {{ request()->routeIs(['manage-users']) ? 'expanded' : '' }}">
-                    <a href="{{ route('manage-users') }}" class="submenu-toggle"><i class="fas fa-users "></i> Users Manage</a>
-                    {{-- <ul class="submenu-items {{ request()->routeIs(['manage-owners', 'vendors.index']) ? 'expanded' : '' }}">
-
-                        <li class="#">
-                            <a href="#">Vendors</a>
-                        </li>
-                    </ul> --}}
+                <li class="submenu {{ request('type') == 'user' ? 'expanded' : '' }}">
+                    <a href="{{ route('manage-users', ['type' => 'user']) }}" class="submenu-toggle"><i
+                            class="fas fa-users "></i> Users Manage</a>
                 </li>
-                <li class="submenu {{ request()->routeIs(['manage-vendors']) ? 'expanded' : '' }}">
-                    <a href="{{ route('manage-vendors') }}" class="submenu-toggle"><i class="fas fa-user-tag"></i> Vendor Manage </a>
-                    {{-- <ul class="submenu-items {{ request()->routeIs(['manage-owners', 'vendors.index']) ? 'expanded' : '' }}">
-
-                        <li class="#">
-                            <a href="#">Vendor Manage</a>
-                        </li>
-                    </ul> --}}
+                <li class="submenu {{ request('type') == 'vendor' ? 'expanded' : '' }}">
+                    <a href="{{ route('manage-users', ['type' => 'vendor']) }}" class="submenu-toggle"><i
+                            class="fas fa-user-tag"></i>
+                        Vendor Manage </a>
                 </li>
 
-                <li class="submenu {{ request()->routeIs(['manage-plans']) ? 'expanded' : '' }}">
-                    <a href="{{ route('manage-plans') }}" class="submenu-toggle"><i class="fas fa-columns"></i> Plan Manage </a>
-                    {{-- <ul class="submenu-items {{ request()->routeIs(['manage-owners', 'vendors.index']) ? 'expanded' : '' }}">
-
-                        <li class="#">
-                            <a href="#">Vendor Manage</a>
-                        </li>
-                    </ul> --}}
+                <li class="submenu {{ request()->is('*plans*') ? 'expanded' : '' }}">
+                    <a href="{{ route('manage-plans') }}" class="submenu-toggle"><i class="fas fa-columns"></i> Plan
+                        Manage </a>
                 </li>
 
                 <li
-                    class="submenu {{ request()->routeIs(['dashboard', 'manage-registration-years', 'manage-varients', 'manage-fuel-types', 'manage-fuel-varients', 'manage-kilometers', 'manage-variant-types']) ? 'expanded' : '' }}">
+                    class="submenu {{ Str::contains(request()->path(), ['dashboard','brands','registration-years','varients','fuel-types','fuel-varients','variant-types','kilometers','owners']) ? 'expanded' : '' }}">
                     <a href="#" class="submenu-toggle"><i class="fas fa-car"></i> Car Details</a>
                     <ul
-                        class="submenu-items {{ request()->routeIs(['dashboard', 'manage-registration-years', 'manage-varients', 'manage-fuel-types', 'manage-fuel-varients', 'manage-kilometers', 'manage-variant-types']) ? 'expanded' : '' }}">
-                        <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        class="submenu-items {{ Str::contains(request()->path(), ['dashboard','brands','registration-years','varients','fuel-types','fuel-varients','variant-types','kilometers','owners']) ? 'expanded' : '' }}">
+                        <li class="{{ Str::contains(request()->path(), ['dashboard','brands']) ? 'active' : '' }}">
                             <a href="{{ route('dashboard') }}">Car Brands</a>
                         </li>
-                        <li class="{{ request()->routeIs('manage-registration-years') ? 'active' : '' }}">
+                        <li class="{{ request()->is('*registration-years*') ? 'active' : '' }}">
                             <a href="{{ route('manage-registration-years') }}">Car Registration Years</a>
                         </li>
-                        <li class="{{ request()->routeIs('manage-varients') ? 'active' : '' }}">
+                        <li class="{{ request()->is('*varients*') ? 'active' : '' }}">
                             <a href="{{ route('manage-varients') }}">Car Varients</a>
                         </li>
-                        <li class="{{ request()->routeIs('manage-fuel-types') ? 'active' : '' }}">
+                        <li class="{{ request()->is('*fuel-types*') ? 'active' : '' }}">
                             <a href="{{ route('manage-fuel-types') }}">Car Fuel Types</a>
                         </li>
-                        <li class="{{ request()->routeIs('manage-fuel-varients') ? 'active' : '' }}">
+                        <li class="{{ request()->is('*fuel-varients*') ? 'active' : '' }}">
                             <a href="{{ route('manage-fuel-varients') }}">Car Fuel Varients</a>
                         </li>
-                        <li class="{{ request()->routeIs('manage-variant-types') ? 'active' : '' }}">
+                        <li class="{{ request()->is('*variant-types*') ? 'active' : '' }}">
                             <a href="{{ route('manage-variant-types') }}">Car Variant Types</a>
                         </li>
-                        <li class="{{ request()->routeIs('manage-kilometers') ? 'active' : '' }}">
+                        <li class="{{ request()->is('*kilometers*') ? 'active' : '' }}">
                             <a href="{{ route('manage-kilometers') }}">Car Kilometer Ranges</a>
                         </li>
-                        <li class="{{ request()->routeIs('manage-owners') ? 'active' : '' }}">
+                        <li class="{{ request()->is('*owners*') ? 'active' : '' }}">
                             <a href="{{ route('manage-owners') }}">Car Owners</a>
                         </li>
                     </ul>
@@ -89,18 +75,23 @@
     <div class="main-content">
         <header>
             <div class="search-container">
-                <i class="fas fa-search fa-lg"></i>
-                <input type="text" placeholder="Search">
+                {{-- <i class="fas fa-search fa-lg"></i>
+                <input type="text" placeholder="Search"> --}}
             </div>
             <div class="user-icon">
                 <i class="fa-bell fas notification"></i>
-                {{-- <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit">Logout</button>
-                </form> --}}
-                <i class="fas fa-user"></i> Jonny
+                <div class="dropdown">
+                    <i class="fas fa-user"></i> Jonny
+                    <div class="dropdown-content">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="logout-button">Logout</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </header>
+
         <main>
             <div class="container">
                 @yield('content')
@@ -113,7 +104,6 @@
         $(document).ready(function() {
             $('.submenu-toggle').click(function() {
                 $(this).next('.submenu-items').slideToggle();
-                //      $(this).toggleClass('rotated');
             });
 
             // Expand submenu if any sub-item is active
@@ -121,9 +111,14 @@
                 if ($(this).find('.submenu-items .active').length) {
                     $(this).addClass('expanded');
                     $(this).find('.submenu-items').show();
-                    //        $(this).find('.submenu-toggle').addClass('rotated');
                 }
             });
+
+            $('.dropdown').on('click', function() {
+                var $dropdownContent = $(this).find('.dropdown-content');
+                $dropdownContent.toggle();
+            });
+
         });
     </script>
 </body>

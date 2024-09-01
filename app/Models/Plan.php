@@ -15,6 +15,7 @@ class Plan extends Model
         'name',
         'total_cars',
         'price',
-        'status'
+        'status',
+        'description'
     ];
 }

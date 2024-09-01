@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\CarOwner;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class CarOwnerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:car_owner,name',
         ]);
 
         CarOwner::create($request->all());
@@ -38,7 +39,7 @@ class CarOwnerController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:car_owner,name,' . $request->id,
         ]);
 
         $carOwner = CarOwner::find($request->id);
@@ -47,9 +48,9 @@ class CarOwnerController extends Controller
         return redirect()->route('manage-owners')->with('success', 'Car Owner updated successfully.');
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        CarOwner::find($request->id)->delete();
+        CarOwner::find($id)->delete();
 
         return redirect()->route('manage-owners')->with('success', 'Car Owner deleted successfully.');
     }
