@@ -1,31 +1,24 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h2>Edit Car Registration Year</h2>
+    <div class="main-container">
+        <h2>Edit Car Registration Year</h2>
+        <form class="car-form" action="{{ route('update-registration-years') }}" method="POST">
+            @csrf
+            @method('POST')
+            <input type="text" hidden name="id" id="id" value="{{ $carRegistrationYear->id }}">
 
-    <form action="{{ route('update-registration-years') }}" method="POST">
-        @csrf
-        @method('POST')
-        <input type="text" hidden name="id" id="id" value="{{ $carRegistrationYear->id }}">
-
-        <div>
-            <label for="year">Year:</label>
-            <input type="number" id="year" name="year" value="{{ $carRegistrationYear->year }}" required>
-            @error('year')
-                <div>{{ $message }}</div>
-            @enderror
-        </div>
-        <div>
-            <label for="car_brand_id">Car Brand:</label>
-            <select id="car_brand_id" name="car_brand_id" required>
-                <option value="">Select Car Brand</option>
-                @foreach ($carBrands as $brand)
-                    <option value="{{ $brand->id }}"
-                        {{ $carRegistrationYear->car_brand_id == $brand->id ? 'selected' : '' }}>{{ $brand->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <button type="submit">Update</button>
-    </form>
+            <div>
+                <label for="year">Year</label>
+                <input type="number" id="year" name="year" value="{{ old('year', $carRegistrationYear->year) }}"
+                    required>
+                @error('year')
+                    <div class="error-text">{{ $message }}</div>
+                @enderror
+            </div>
+            <button type="submit" class="button">Update</button>
+            <button type="button" class="button" id="cancel"
+                onclick="window.location='{{ route('manage-registration-years') }}'">Cancel</button>
+        </form>
+    </div>
 @endsection

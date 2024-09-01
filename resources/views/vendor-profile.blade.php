@@ -5,95 +5,183 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        body {
+        .profile-page {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            color: #333;
         }
 
         .profile-header {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            height: 30vh;
+            height: 190px;
+            background-color: #4476fb;
             display: flex;
-            justify-content: center;
             align-items: center;
-        }
-
-        .profile-picture-container {
-            display: flex;
             justify-content: center;
-            margin-top: -50px;
+            flex-direction: column;
+            padding-top: 40px;
+            position: relative;
         }
 
         .profile-picture {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 5px solid white;
-        }
-
-        .separator {
-            border: none;
-            border-top: 2px solid #ccc;
-            margin: 20px 0;
-        }
-
-        .car-display-card {
-            background-color: white;
-            padding: 20px;
-            margin: 0 auto;
-            max-width: 600px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             display: flex;
-            align-items: center;
-            border-radius: 10px;
+            justify-content: center;
         }
 
-        .car-image img {
-            width: 150px;
-            height: 100px;
-            border-radius: 10px;
-            object-fit: cover;
-            margin-right: 20px;
+        .profile-picture img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 10px;
+            border: 5px solid #fff;
+            position: absolute;
+            top: 77px;
+            transform: translateY(-50%);
         }
 
-        .car-details h2 {
+        .profile-info {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .profile-info h2 {
+            color: #fff;
             margin: 0;
             font-size: 24px;
         }
 
+        .profile-info p {
+            color: #fff;
+            margin: 5px 0;
+        }
+
+        .separator {
+            border: none;
+            border-top: 2px solid #ddd;
+            margin: 20px 0;
+        }
+
+        .car-cards-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-height: 570px;
+            overflow-y: auto;
+            padding: 0 10px 10px;
+        }
+
+        .car-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .car-card img,video {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .car-details {
+            text-align: center;
+        }
+
+        .car-details h3 {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
         .car-details p {
             margin: 5px 0;
-            color: #555;
+            font-size: 14px;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #4476fb;
+            font-size: 16px;
+        }
+
+        .car-details {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .car-details p {
+            display: table-cell;
+            padding: 10px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #4476fb;
+        }
+
+        i {
+            color: #4476fb;
+
         }
     </style>
 </head>
 
 <body>
-    <header class="profile-header">
-        <h1>Profile Header</h1>
-    </header>
+    <div class="profile-page">
+        <header class="profile-header">
+            <div class="profile-picture">
+                <img src="{{ $vendor->image }}" alt="Profile Picture">
+            </div>
+            <div class="profile-info">
+                <h2>{{ $vendor->name }}</h2>
+                <p>Contact: {{ $vendor->phoneno }}</p>
+                <p>Location: {{ $vendor->location }}</p>
+            </div>
+        </header>
 
-    <div class="profile-picture-container">
-        <img src="profile-picture.jpg" alt="Profile Picture" class="profile-picture">
-    </div>
+        <hr class="separator">
 
-    <hr class="separator">
+        <div class="car-cards-container">
+            @forelse ($cars as $car)
+                <div class="car-card">
 
-    <div class="car-display-card">
-        <div class="car-image">
-            <img src="car-image.jpg" alt="Car Image">
-        </div>
-        <div class="car-details">
-            <h2>Car Name</h2>
-            <p>Price: $20,000</p>
-            <p>Kilometers: 50,000 KM</p>
-            <p>Year: 2015</p>
-            <p>Fuel Type: Petrol</p>
+                    @if (count($car->car_image) && $car->car_image->first())
+                        @if ($car->car_image->first()->type == 'image')
+                            <img src="{{ $car->car_image->first()->image }}" alt="Car Image" height="310">
+                        @elseif ($car->car_image->first()->type == 'video')
+                            <video height="310" controls>
+                                <source src="{{ $car->car_image->first()->image }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        @else
+                            <img alt="Car Image" height="310">
+                        @endif
+                    @endif
+
+                    <div style="align-self: normal;display: flex;justify-content: space-between;">
+                        <h3>{{ $car->car_brand->name }} {{ $car->car_varient->name }} {{ $car->car_fuel_varient->name }}
+                        </h3>
+                        <p class="price">₹ {{ number_format($car->price) }}</p>
+                    </div>
+                    <div class="car-details">
+                        <p><i class="fas fa-gas-pump"></i> {{ $car->car_fuel_type->fuel_type }}</p>
+                        <p><i class="fas fa-wave-square"></i> {{ $car->transmission }}</p>
+                        <p><i class="fas fa-car"></i> {{ $car->car_varient_type->name }}</p>
+                        <p><i class="fas fa-tachometer-alt"></i> {{ $car->car_kilometer->start_km }} -
+                            {{ $car->car_kilometer->end_km }} km</p>
+                        <p><i class="fas fa-user-friends"></i> {{ $car->car_owner->name }} </p>
+                    </div>
+                </div>
+            @empty
+                <div>
+                    <h2>No cars added ! Please Add !!</h2>
+                </div>
+            @endforelse
         </div>
     </div>
 </body>
