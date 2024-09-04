@@ -207,8 +207,11 @@
                     <label for="gst_certificate" class="form-label">GST Certificate</label>
                 </div>
                 <div>
-                    <input disabled type="text" name="gst_certificate" id="gst_certificate"
-                        value="{{ basename($user->gst_certificate) }}" >
+                    <a href="{{ asset($user->gst_certificate) }}" target="_blank" style="
+                        padding-left: 25px;
+                    ">{{ basename($user->gst_certificate) }}</a>
+                    {{-- <input disabled type="text" name="gst_certificate" id="gst_certificate"
+                        value="{{ asset($user->gst_certificate) }}" > --}}
                 </div>
             </div>
 
@@ -217,8 +220,11 @@
                     <label for="partnersheep_deed" class="form-label">Partnersheep Deed</label>
                 </div>
                 <div>
-                    <input disabled type="text" name="partnersheep_deed" id="partnersheep_deed"
-                        value="{{ basename($user->partnersheep_deed) }}" >
+                    <a href="{{ asset($user->partnersheep_deed) }}" target="_blank" style="
+                        padding-left: 25px;
+                    ">{{ basename($user->partnersheep_deed) }}</a>
+                    {{-- <input disabled type="text" name="partnersheep_deed" id="partnersheep_deed"
+                        value="{{ basename($user->partnersheep_deed) }}" > --}}
                 </div>
             </div>
 
@@ -227,7 +233,10 @@
                     <label for="adharcard_one" class="form-label">Adharcard 1</label>
                 </div>
                 <div>
-                    <input disabled type="text" name="adharcard_one" id="adharcard_one" value="{{ basename($user->adharcard_one) }}">
+                    <a href="{{ asset($user->adharcard_one) }}" target="_blank" style="
+                        padding-left: 25px;
+                    ">{{ basename($user->adharcard_one) }}</a>
+                    {{-- <input disabled type="text" name="adharcard_one" id="adharcard_one" value="{{ basename($user->adharcard_one) }}"> --}}
                 </div>
             </div>
 
@@ -236,7 +245,10 @@
                     <label for="adharcard_two" class="form-label">Adharcard 2</label>
                 </div>
                 <div>
-                    <input disabled type="text" name="adharcard_two" id="adharcard_two" value="{{ basename($user->adharcard_two) }}">
+                    <a href="{{ asset($user->adharcard_two) }}" target="_blank" style="
+                        padding-left: 25px;
+                    ">{{ basename($user->adharcard_two) }}</a>
+                    {{-- <input disabled type="text" name="adharcard_two" id="adharcard_two" value="{{ basename($user->adharcard_two) }}"> --}}
                 </div>
             </div>
 
@@ -245,7 +257,10 @@
                     <label for="cancel_cheque" class="form-label">Cancel Cheque</label>
                 </div>
                 <div>
-                    <input disabled type="text" name="cancel_cheque" id="cancel_cheque" value="{{ basename($user->cancel_cheque) }}">
+                    <a href="{{ asset($user->cancel_cheque) }}" target="_blank" style="
+                        padding-left: 25px;
+                    ">{{ basename($user->cancel_cheque) }}</a>
+                    {{-- <input disabled type="text" name="cancel_cheque" id="cancel_cheque" value="{{ basename($user->cancel_cheque) }}"> --}}
                 </div>
             </div>
 

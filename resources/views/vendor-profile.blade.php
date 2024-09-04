@@ -10,6 +10,9 @@
         .profile-page {
             font-family: Arial, sans-serif;
             color: #333;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
         .profile-header {
@@ -65,8 +68,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            max-height: 570px;
-            overflow-y: auto;
+            flex-grow: 1;
             padding: 0 10px 10px;
         }
 
@@ -78,9 +80,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .car-card img,video {
+        .car-card img,
+        video {
             width: 100%;
             border-radius: 8px;
             margin-bottom: 10px;
@@ -127,6 +131,18 @@
         i {
             color: #4476fb;
 
+        }
+
+        @media (max-width: 1024px) {
+            .car-cards-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .car-cards-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>

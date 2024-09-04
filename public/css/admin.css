@@ -5,12 +5,19 @@ body {
 }
 
 .sidebar {
-    width           : 240px;
-    background-color: #4476fb;
-    color           : #ecf0f1;
-    height          : 100vh;
-    position        : fixed;
-    overflow-y      : auto;
+    width              : 250px;
+    background-color   : #4476fb;
+    color              : #ecf0f1;
+    height             : 100vh;
+    position           : fixed;
+    overflow-y         : auto;
+    font-family        : "Nunito Sans", sans-serif;
+    /* font-optical-sizing: auto;
+    font-weight        : 300;
+    font-style         : normal;
+    font-variation-settings:
+        "wdth"100,
+        "YTLC"500; */
 }
 
 .sidebar .logo {
@@ -27,6 +34,7 @@ body {
 .sidebar nav ul li {
     padding   : 20px 25px;
     transition: background-color 0.3s ease;
+    /* margin-bottom: 23px; */
 }
 
 .sidebar nav ul li a {
@@ -43,17 +51,17 @@ body {
 }
 
 .sidebar nav ul li a i {
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 .submenu-items {
     display  : none;
-    padding  : 0 !important;
+    padding  : 0px 0px 0px 17px !important;
     font-size: small;
 }
 
 nav ul .expanded {
-    border       : 2px white solid;
+    border       : 1px white solid;
     border-radius: 24px;
 }
 
@@ -123,6 +131,7 @@ table {
     margin-bottom  : 20px;
     margin-top     : 20px;
     box-shadow     : 0px 0px 0px rgba(0, 0, 0, 0.1), 0px 2px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
 }
 
 table,
@@ -395,4 +404,19 @@ main .container {
     flex-grow     : 1;
     display       : flex;
     flex-direction: column;
+}
+
+.submenu-items .active {
+    margin-left: -15px;
+}
+
+table,
+tr th:first-child {
+    border-top-left-radius: 12px;
+
+}
+
+table,
+tr th:last-child {
+    border-top-right-radius: 12px;
 }

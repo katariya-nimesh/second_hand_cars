@@ -9,16 +9,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- Add jQuery for submenu toggle functionality -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     @yield('style')
 </head>
 
 <body>
     <div class="sidebar">
-        <div class="logo" style="padding: 0px;margin: 0px 0px -4px 0px;;">
+        <div class="logo" style="padding: 0px;margin: 0px 0px -6px 0px;;">
             <img style="width: -webkit-fill-available" src="{{ asset('logo/logo.jpg') }}" alt="" height="83" width="240">
         </div>
         <div class="dashboard">
-            <p><i class="fas fa-home"></i> Dashboard</p>
+            <p><i class="fas fa-home" style="padding-right: 10px;"></i>  Dashboard</p>
         </div>
         <nav>
             <ul>
