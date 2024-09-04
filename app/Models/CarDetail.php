@@ -45,10 +45,12 @@ class CarDetail extends Model
     public function getWishlistStatusAttribute()
     {
         $user = Auth::user();
-        $wishlist = Wishlist::where('user_id', $user->id)->where('car_details_id', $this->id)->first();
+        if($user){
+            $wishlist = Wishlist::where('user_id', $user->id)->where('car_details_id', $this->id)->first();
 
-        if ($wishlist) {
-            return true;
+            if ($wishlist) {
+                return true;
+            }
         }
         return false;
     }
@@ -56,9 +58,12 @@ class CarDetail extends Model
     public function getWishlistDetailsAttribute()
     {
         $user = Auth::user();
-        $wishlist = Wishlist::where('user_id', $user->id)->where('car_details_id', $this->id)->first();
+        if($user){
+            $wishlist = Wishlist::where('user_id', $user->id)->where('car_details_id', $this->id)->first();
 
-        return $wishlist;
+            return $wishlist;
+        }
+        return null;
     }
 
     protected $appends = ['wishlist_status', 'wishlist_details'];

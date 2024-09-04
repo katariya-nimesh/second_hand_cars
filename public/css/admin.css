@@ -5,19 +5,19 @@ body {
 }
 
 .sidebar {
-    width              : 240px;
+    width              : 250px;
     background-color   : #4476fb;
     color              : #ecf0f1;
     height             : 100vh;
     position           : fixed;
     overflow-y         : auto;
     font-family        : "Nunito Sans", sans-serif;
-    font-optical-sizing: auto;
+    /* font-optical-sizing: auto;
     font-weight        : 300;
     font-style         : normal;
     font-variation-settings:
         "wdth"100,
-        "YTLC"500;
+        "YTLC"500; */
 }
 
 .sidebar .logo {
@@ -28,13 +28,13 @@ body {
 
 .sidebar nav ul {
     list-style: none;
-    padding   : 0px 32px;
+    padding   : 0px 14px;
 }
 
 .sidebar nav ul li {
-    padding      : 9px 8px 9px 15px;
-    transition   : background-color 0.3s ease;
-    margin-bottom: 23px;
+    padding   : 20px 25px;
+    transition: background-color 0.3s ease;
+    /* margin-bottom: 23px; */
 }
 
 .sidebar nav ul li a {
