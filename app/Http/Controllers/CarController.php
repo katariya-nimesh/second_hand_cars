@@ -201,20 +201,22 @@ class CarController extends Controller
                 ]);
 
                 // Delete old images if new images are provided
-                if ($request->hasFile('images')) {
+                // if ($request->hasFile('images')) {
                     // update_images
-                    $updateImages = $request->update_images;
+                    $updateImages = $request->update_images ?? [];
                     foreach ($updateImages as $updateImageId) {
                         $oldImage = CarImage::where([
                             'car_details_id' => $carDetails->id,
                             'id' => $updateImageId,
                             'type' => 'image'
                             ])->first();
-                        $oldImagePath = str_replace('/storage', 'public', $oldImage->image);
-                        Storage::delete($oldImagePath);
-                        $oldImage->delete();
+                        if($oldImage){
+                            $oldImagePath = str_replace('/storage', 'public', $oldImage->image);
+                            Storage::delete($oldImagePath);
+                            $oldImage->delete();
+                        }
                     }
-                }
+                // }
 
                 // Delete old videos if new videos are provided
                 if ($request->hasFile('videos')) {
