@@ -149,7 +149,6 @@ class User extends Authenticatable
     {
         // Define the fields that need to be checked
         $requiredFields = [
-            'name',
             'email',
             'phoneno',
             'business_name',

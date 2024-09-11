@@ -188,7 +188,12 @@ class UserController extends Controller
 
     public function vendorProfileWebPage($id){
         try {
-            $vendor = User::where('user_type','vendor')->where('id', $id)->first();
+            $vendor = User::where([
+                'user_type' => 'vendor',
+                'id' => $id,
+                'vendor_status' => "1",
+                'status' => "1"
+                ])->first();
 
             if (!$vendor) {
                 return ResponseHelper::error('Vendor not found', 404);

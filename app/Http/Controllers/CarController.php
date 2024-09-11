@@ -202,8 +202,14 @@ class CarController extends Controller
 
                 // Delete old images if new images are provided
                 if ($request->hasFile('images')) {
-                    $oldImages = CarImage::where('car_details_id', $carDetails->id)->where('type', 'image')->get();
-                    foreach ($oldImages as $oldImage) {
+                    // update_images
+                    $updateImages = $request->update_images;
+                    foreach ($updateImages as $updateImageId) {
+                        $oldImage = CarImage::where([
+                            'car_details_id' => $carDetails->id,
+                            'id' => $updateImageId,
+                            'type' => 'image'
+                            ])->first();
                         $oldImagePath = str_replace('/storage', 'public', $oldImage->image);
                         Storage::delete($oldImagePath);
                         $oldImage->delete();
