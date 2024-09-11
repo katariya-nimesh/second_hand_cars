@@ -133,6 +133,54 @@
 
         }
 
+        .custom-slider {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .slider-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+            flex: 0 0 100%;
+        }
+
+        .slider-slide img,
+        .slider-slide video {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .slider-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 100;
+            border-radius: 50%;
+        }
+
+        .prev-button {
+            left: 10px;
+        }
+
+        .next-button {
+            right: 10px;
+        }
+
+
         @media (max-width: 1024px) {
             .car-cards-container {
                 grid-template-columns: repeat(2, 1fr);
@@ -165,23 +213,31 @@
         <div class="car-cards-container">
             @forelse ($cars as $car)
                 <div class="car-card">
-
-                    @if (count($car->car_image) && $car->car_image->first())
-                        @if ($car->car_image->first()->type == 'image')
-                            <img src="{{ $car->car_image->first()->image }}" alt="Car Image" height="310">
-                        @elseif ($car->car_image->first()->type == 'video')
-                            <video height="310" controls>
-                                <source src="{{ $car->car_image->first()->image }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        @else
-                            <img alt="Car Image" height="310">
-                        @endif
+                    @if (count($car->car_image))
+                        <div class="custom-slider">
+                            <div class="slider-wrapper">
+                                @foreach ($car->car_image as $image)
+                                    <div class="slider-slide">
+                                        @if ($image->type == 'image')
+                                            <img src="{{ $image->image }}" alt="Car Image" height="310">
+                                        @elseif ($image->type == 'video')
+                                            <video height="310" controls>
+                                                <source src="{{ $image->image }}" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                            <button class="slider-button prev-button">&#10094;</button>
+                            <button class="slider-button next-button">&#10095;</button>
+                        </div>
+                    @else
+                        <img alt="Car Image" height="310">
                     @endif
 
-                    <div style="align-self: normal;display: flex;justify-content: space-between;">
-                        <h3>{{ $car->car_brand->name }} {{ $car->car_varient->name }} {{ $car->car_fuel_varient->name }}
-                        </h3>
+                    <div style="align-self: normal; display: flex; justify-content: space-between;">
+                        <h3>{{ $car->car_brand->name }} {{ $car->car_varient->name }} {{ $car->car_fuel_varient->name }}</h3>
                         <p class="price">₹ {{ number_format($car->price) }}</p>
                     </div>
                     <div class="car-details">
@@ -195,11 +251,44 @@
                 </div>
             @empty
                 <div>
-                    <h2>No cars added ! Please Add !!</h2>
+                    <h2>No cars added! Please add!</h2>
                 </div>
             @endforelse
         </div>
+
+
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sliders = document.querySelectorAll('.custom-slider');
+
+            sliders.forEach((slider) => {
+                const wrapper = slider.querySelector('.slider-wrapper');
+                const slides = slider.querySelectorAll('.slider-slide');
+                const nextButton = slider.querySelector('.next-button');
+                const prevButton = slider.querySelector('.prev-button');
+                let currentIndex = 0;
+
+                function showSlide(index) {
+                    wrapper.style.transform = `translateX(-${index * 100}%)`;
+                }
+
+                nextButton.addEventListener('click', function () {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    showSlide(currentIndex);
+                });
+
+                prevButton.addEventListener('click', function () {
+                    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                    showSlide(currentIndex);
+                });
+
+                // Initial display
+                showSlide(currentIndex);
+            });
+        });
+    </script>
 </body>
 
 </html>
