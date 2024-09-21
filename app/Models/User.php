@@ -72,13 +72,14 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'isPaymentEnabled' => 'boolean',
     ];
 
     public function getImageAttribute($value)
     {
         return $value ? asset($value) : null;
     }
-
+    
     public function getVendorLivePhotoAttribute($value)
     {
         return $value ? asset($value) : null;
