@@ -51,7 +51,8 @@ class User extends Authenticatable
         'cancel_cheque',
         'plan_id',
         'plan_start_date',
-        'plan_end_date'
+        'plan_end_date',
+        'isPaymentEnabled'
     ];
 
     /**
