@@ -7,6 +7,7 @@ use App\Helpers\ResponseHelper;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Plan;
+use App\Models\CouponCode;
 use Carbon\Carbon;
 
 class PlanPackageController extends Controller
@@ -67,18 +68,11 @@ class PlanPackageController extends Controller
     public function checkCoupon($code)
     {
         try {
-            if($code == "FIRSTOFF"){
-                return ResponseHelper::success([
-                    'coupon_code' => 'FIRSTOFF',
-                    'discount' => 500
-                ], 'Coupon match! discount applied');
-            }
 
-            if($code == "GET50"){
-                return ResponseHelper::success([
-                    'coupon_code' => 'GET50',
-                    'discount' => 50
-                ], 'Coupon match! discount applied');
+            $couponCode = CouponCode::where('code', $code)->first();
+
+            if($couponCode){
+                return ResponseHelper::success($couponCode, 'Coupon match! discount applied');
             }
 
             return ResponseHelper::success(null, 'Coupon does not match');
