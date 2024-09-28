@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\CarOwnerController;
 use App\Http\Controllers\Admin\CarKilometerController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\CouponCodeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 
 /*
@@ -120,6 +121,14 @@ Route::middleware(['Authenticated', 'prevent-back-history'])->group(function () 
     Route::post('update-plans',         [PlanController::class, 'update'])->name('update-plans');
     Route::post('change-plan-status',   [PlanController::class, 'changeStatus'])->name('change-plan-status');
     Route::delete('delete-plans/{id}',  [PlanController::class, 'destroy'])->name('delete-plans');
+
+    //Coupon Code
+    Route::get('manage-coupon-code',          [CouponCodeController::class, 'index'])->name('manage-coupon-code');
+    Route::get('create-coupon-code',          [CouponCodeController::class, 'create'])->name('create-coupon-code');
+    Route::get('edit-coupon-code/{id?}',      [CouponCodeController::class, 'edit'])->name('edit-coupon-code');
+    Route::post('add-coupon-code',            [CouponCodeController::class, 'store'])->name('add-coupon-code');
+    Route::post('update-coupon-code',         [CouponCodeController::class, 'update'])->name('update-coupon-code');
+    Route::delete('delete-coupon-code/{id}',  [CouponCodeController::class, 'destroy'])->name('delete-coupon-code');
 });
 
 Route::get('vendor-profile/{id}', [AdminUserController::class, 'vendorProfileWebPage']);

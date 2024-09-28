@@ -72,6 +72,11 @@
                     </ul>
                 </li>
 
+                <li class="submenu {{ request()->is('*coupon-code*') ? 'expanded' : '' }}">
+                    <a href="{{ route('manage-coupon-code') }}" class="submenu-toggle"><i class="fas fa-gift"></i> Coupon
+                        Manage </a>
+                </li>
+
             </ul>
         </nav>
     </div>
