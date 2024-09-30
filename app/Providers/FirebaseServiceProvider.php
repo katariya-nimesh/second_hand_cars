@@ -3,27 +3,29 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Kreait\Firebase\Factory;
-use Kreait\Firebase\Http\HttpClientOptions;
-use GuzzleHttp\Client;
+use App\Services\FirebaseNotificationService;
 
 class FirebaseServiceProvider extends ServiceProvider
 {
+    /**
+     * Register services.
+     *
+     * @return void
+     */
     public function register()
     {
-        $this->app->singleton('firebase.messaging', function ($app) {
-            $factory = new Factory();
-
-            $credentialsPath = base_path(config('firebase.credentials'));
-
-            if (file_exists($credentialsPath)) {
-                $factory = $factory->withServiceAccount($credentialsPath);
-            } else {
-                \Log::error('Firebase credentials file not found: ' . $credentialsPath);
-                throw new \Exception('Firebase credentials file not found: ' . $credentialsPath);
-            }
-
-            return $factory->createMessaging();
+        $this->app->singleton(FirebaseNotificationService::class, function ($app) {
+            return new FirebaseNotificationService();
         });
+    }
+
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        //
     }
 }
