@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use Kreait\Firebase\Messaging\CloudMessage;
 use App\Helpers\ResponseHelper;
 use Illuminate\Support\Facades\Log;
+use App\Services\FirebaseNotificationService;
 
 class NotificationController extends Controller
 {
-    public function sendNotification(Request $request)
+    public function sendNotificationBackup(Request $request)
     {
         // return "base_path('firebase_credentials.json')";
         try {
@@ -42,6 +43,27 @@ class NotificationController extends Controller
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ], 500);
+        }
+    }
+
+    protected $firebaseService;
+
+    public function __construct(FirebaseNotificationService $firebaseService)
+    {
+        $this->firebaseService = $firebaseService;
+    }
+
+    public function sendNotification(Request $request)
+    {
+        try {
+            $result = $this->firebaseService->sendNotification(
+                $request->device_token,
+                $request->title,
+                $request->body
+            );
+            return response()->json(['message' => 'Notification sent successfully', 'result' => $result]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }
