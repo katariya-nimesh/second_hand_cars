@@ -9,6 +9,7 @@ use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\PlanPackageController;
 use App\Http\Controllers\UserWalletTransactionController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,5 +94,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // check coupon
     Route::get('/check-coupon/{code}', [PlanPackageController::class, 'checkCoupon']);
+
+    // Send firebase notification
+    Route::post('/send-notification', [NotificationController::class, 'sendNotification']);
+
+
 
 });
