@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\CarOwnerController;
 use App\Http\Controllers\Admin\CarKilometerController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Admin\CouponCodeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 
@@ -129,6 +130,11 @@ Route::middleware(['Authenticated', 'prevent-back-history'])->group(function () 
     Route::post('add-coupon-code',            [CouponCodeController::class, 'store'])->name('add-coupon-code');
     Route::post('update-coupon-code',         [CouponCodeController::class, 'update'])->name('update-coupon-code');
     Route::delete('delete-coupon-code/{id}',  [CouponCodeController::class, 'destroy'])->name('delete-coupon-code');
+
+    // Notification (Firebase)
+    Route::get('manage-notification',          [NotificationController::class, 'showForm'])->name('manage-notification');
+    Route::post('manage-notification', [NotificationController::class, 'sendNotification'])->name('notifications.send');
+
 });
 
 Route::get('vendor-profile/{id}', [AdminUserController::class, 'vendorProfileWebPage']);

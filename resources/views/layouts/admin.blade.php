@@ -77,6 +77,10 @@
                         Manage </a>
                 </li>
 
+                <li class="submenu {{ request()->is('*notification*') ? 'expanded' : '' }}">
+                    <a href="{{ route('manage-notification') }}" class="submenu-toggle"><i class="fas fa-bell"></i> Notifications </a>
+                </li>
+
             </ul>
         </nav>
     </div>
