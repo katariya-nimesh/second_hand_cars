@@ -3,9 +3,6 @@
 namespace App\Services;
 
 use Google\Client;
-use Google\Service\FirebaseCloudMessaging\SendMessageRequest;
-use Google\Service\FirebaseCloudMessaging\Message;
-use Google\Service\FirebaseCloudMessaging\Notification;
 use Illuminate\Support\Facades\Http;
 
 class FirebaseNotificationService
@@ -21,25 +18,31 @@ class FirebaseNotificationService
         $this->client->addScope('https://www.googleapis.com/auth/firebase.messaging');
     }
 
-    public function sendNotification($deviceToken, $title, $body)
+    public function sendNotification($deviceTokens, $title, $body)
     {
         $accessToken = $this->client->fetchAccessTokenWithAssertion()['access_token'];
 
-        $response = Http::withToken($accessToken)
-            ->post("https://fcm.googleapis.com/v1/projects/{$this->projectId}/messages:send", [
-                'message' => [
-                    'token' => $deviceToken,
-                    'notification' => [
-                        'title' => $title,
-                        'body' => $body,
-                    ],
-                ],
-            ]);
+        $results = [];
 
-        if ($response->successful()) {
-            return $response->json();
-        } else {
-            throw new \Exception('Failed to send notification: ' . $response->body());
+        foreach ((array)$deviceTokens as $deviceToken) {
+            $response = Http::withToken($accessToken)
+                ->post("https://fcm.googleapis.com/v1/projects/{$this->projectId}/messages:send", [
+                    'message' => [
+                        'token' => $deviceToken,
+                        'notification' => [
+                            'title' => $title,
+                            'body' => $body,
+                        ],
+                    ],
+                ]);
+
+            if ($response->successful()) {
+                $results[$deviceToken] = $response->json();
+            } else {
+                $results[$deviceToken] = ['error' => $response->body()];
+            }
         }
+
+        return $results;
     }
 }

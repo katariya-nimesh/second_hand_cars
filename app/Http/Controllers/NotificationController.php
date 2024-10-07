@@ -7,6 +7,7 @@ use Kreait\Firebase\Messaging\CloudMessage;
 use App\Helpers\ResponseHelper;
 use Illuminate\Support\Facades\Log;
 use App\Services\FirebaseNotificationService;
+use App\Models\User;
 
 class NotificationController extends Controller
 {
@@ -53,17 +54,45 @@ class NotificationController extends Controller
         $this->firebaseService = $firebaseService;
     }
 
+    public function showForm()
+    {
+        return view('admin.notification.index');
+    }
+
     public function sendNotification(Request $request)
     {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+            'user_type' => 'required|string',
+        ]);
         try {
+
+            $query = User::where('status', '1');
+
+            if($request->user_type == 'user' || $request->user_type == 'vendor'){
+                $query->where('user_type', $request->user_type);
+            }
+
+            $deviceTokens = $query->pluck('fcm_token')->toArray();
+
             $result = $this->firebaseService->sendNotification(
-                $request->device_token,
+                $deviceTokens,
                 $request->title,
                 $request->body
             );
-            return response()->json(['message' => 'Notification sent successfully', 'result' => $result]);
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Notifications sent', 'result' => $result]);
+            }
+
+            return redirect()->back()->with('success', 'Notifications sent successfully');
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            if ($request->expectsJson()) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+
+            return redirect()->back()->with('error', 'Failed to send notifications: ' . $e->getMessage())->withInput();
         }
     }
 }
