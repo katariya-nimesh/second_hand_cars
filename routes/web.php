@@ -138,3 +138,7 @@ Route::middleware(['Authenticated', 'prevent-back-history'])->group(function () 
 });
 
 Route::get('vendor-profile/{id}', [AdminUserController::class, 'vendorProfileWebPage']);
+
+
+Route::get('export-users', [AdminUserController::class, 'exportUsers'])->name('admin.export.users');
+Route::get('export-vendors', [AdminUserController::class, 'exportvendors'])->name('admin.export.vendors');

@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-
+use App\Exports\WalletTransactionsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserWalletTransactionController extends Controller
 {
@@ -127,4 +128,36 @@ class UserWalletTransactionController extends Controller
             return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }
     }
+
+    public function transactionHistory(Request $request)
+    {
+        try {
+            $request->validate([
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
+            ]);
+
+            // Get the start and end dates from the request
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+
+            // Define the file path and name
+            $fileName = 'wallet_transactions_' . time() . '.xlsx';
+            $filePath = 'exports/' . $fileName;
+
+            // Store the Excel file in the storage/app/exports directory
+            Excel::store(new WalletTransactionsExport($startDate, $endDate), $filePath);
+
+            // Generate a public URL to the file
+            $fileUrl = Storage::url($filePath);
+
+            // Return a JSON response with the file download link
+            return ResponseHelper::success(asset($fileUrl), 'Wallet transactions exported successfully');
+        
+        } catch (\Exception $e) {
+            return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
+        }
+    }
+
+
 }
