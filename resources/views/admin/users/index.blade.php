@@ -4,7 +4,9 @@
     <div class="main-container">
         <div style="display: flex;justify-content: space-between;">
             <h2>All User</h2>
+
             <a href="{{ route('create-users', ['type' => 'user']) }}" class="button">Create New User</a>
+            <a href="{{ route('admin.export.users') }}" class="button">Download Users Data</a>
         </div>
         <table>
             <thead>

@@ -98,6 +98,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Send firebase notification
     Route::post('/send-notification', [NotificationController::class, 'sendNotification']);
 
-
+    // transaction history invoice download
+    Route::post('/transaction-history', [UserWalletTransactionController::class, 'transactionHistory']);
 
 });

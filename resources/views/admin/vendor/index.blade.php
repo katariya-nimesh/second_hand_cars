@@ -33,6 +33,7 @@
         <div style="display: flex;justify-content: space-between;">
             <h2>All Vendor</h2>
             <a href="{{ route('create-users',["type" => 'vendor']) }}" class="button">Create New Vendor</a>
+            <a href="{{ route('admin.export.vendors') }}" class="button">Download Vendors Data</a>
         </div>
         <table>
             <thead>

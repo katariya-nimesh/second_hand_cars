@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Helpers\ResponseHelper;
 use App\Models\CarDetail;
 use Illuminate\Support\Facades\Storage;
+use App\Exports\UsersExport;
+use App\Exports\VendorsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -205,5 +208,15 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }
+    }
+
+    public function exportUsers()
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
+    }
+
+    public function exportVendors()
+    {
+        return Excel::download(new VendorsExport, 'vendors.xlsx');
     }
 }
