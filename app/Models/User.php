@@ -19,15 +19,17 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
+        'uid',
         'name',
-        'email',
-        'password',
         'phoneno',
+        'email',
         'business_name',
         'location',
         'user_type',
-        'uid',
         'fcm_token',
+        'created_at',
+        'updated_at',
         'image',
         'status',
         'vendor_status',
@@ -79,7 +81,7 @@ class User extends Authenticatable
     {
         return $value ? asset($value) : null;
     }
-    
+
     public function getVendorLivePhotoAttribute($value)
     {
         return $value ? asset($value) : null;

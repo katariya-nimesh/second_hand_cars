@@ -4,8 +4,10 @@ namespace App\Exports;
 
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Illuminate\Support\Facades\Schema;
 
-class UsersExport implements FromCollection
+class UsersExport implements FromCollection, WithHeadings
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -13,5 +15,9 @@ class UsersExport implements FromCollection
     public function collection()
     {
         return User::where('user_type', 'user')->get();
+    }
+
+    public function headings(): array {
+        return (new User)->getFillable(); // Auto-fetch column names
     }
 }
