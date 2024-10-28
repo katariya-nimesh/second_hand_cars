@@ -5,8 +5,10 @@ namespace App\Exports;
 use App\Models\UserWalletTransaction;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Illuminate\Support\Facades\Schema;
 
-class WalletTransactionsExport implements FromCollection
+class WalletTransactionsExport implements FromCollection, WithHeadings
 {
     protected $startDate;
     protected $endDate;
@@ -24,6 +26,10 @@ class WalletTransactionsExport implements FromCollection
     {
         $user = Auth::user();
         return UserWalletTransaction::where('user_id', $user->id)->whereBetween('date', [$this->startDate, $this->endDate])->get();
+    }
+
+    public function headings(): array {
+        return (new UserWalletTransaction)->getFillable(); // Auto-fetch column names
     }
 }
 

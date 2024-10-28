@@ -10,13 +10,16 @@ class UserWalletTransaction extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'user_id',
-        'car_details_id',
         'car_image',
         'car_name',
         'date',
         'amount',
         'transaction_type',
+        'created_at',
+        'updated_at',
+        'car_details_id',
     ];
 
     public function car_detail()
