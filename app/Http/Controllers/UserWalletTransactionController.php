@@ -143,7 +143,7 @@ class UserWalletTransactionController extends Controller
 
             // Define the file path and name
             $fileName = 'wallet_transactions_' . time() . '.xlsx';
-            $filePath = 'exports/' . $fileName;
+            $filePath = 'public/exports/' . $fileName;
 
             // Store the Excel file in the storage/app/exports directory
             Excel::store(new WalletTransactionsExport($startDate, $endDate), $filePath);
@@ -153,7 +153,7 @@ class UserWalletTransactionController extends Controller
 
             // Return a JSON response with the file download link
             return ResponseHelper::success(asset($fileUrl), 'Wallet transactions exported successfully');
-        
+
         } catch (\Exception $e) {
             return ResponseHelper::error('An error occurred: ' . $e->getMessage(), 500);
         }
